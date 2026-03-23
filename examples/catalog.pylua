@@ -1,0 +1,37 @@
+import fs
+import json
+import time
+
+let catalog = {
+    generated_at: time.utc(),
+    site: {
+        name: "PyLua Roastery",
+        city: "Istanbul"
+    },
+    products: [
+        {
+            id: 1,
+            name: "Latte",
+            price: 120,
+            tags: ["milk", "espresso"]
+        },
+        {
+            id: 2,
+            name: "Mocha",
+            price: 135,
+            tags: ["chocolate", "espresso"]
+        }
+    ]
+}
+
+let first_product = catalog.products[0]
+print(first_product.name)
+print(first_product.tags[1])
+print(catalog["site"].city)
+
+if not fs.exists("build/out") then
+    fs.mkdir("build/out", true)
+end
+
+json.write("build/out/catalog.json", catalog)
+print(json.encode(catalog))

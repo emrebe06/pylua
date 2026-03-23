@@ -1,0 +1,14 @@
+let counter = 0
+let total = 0
+
+while counter < 4 do
+    print("tick " + counter)
+    total = total + counter
+    counter = counter + 1
+end
+
+if total == 6 then
+    print("vm toplam 6")
+else
+    print("vm hata")
+end

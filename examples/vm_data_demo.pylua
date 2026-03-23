@@ -1,0 +1,9 @@
+let site = {
+    name: "North Ember",
+    city: "Istanbul",
+    menu: ["Latte", "Mocha", "Espresso"]
+}
+
+print(site.name)
+print(site["city"])
+print(site.menu[2])

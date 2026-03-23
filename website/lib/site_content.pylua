@@ -1,0 +1,35 @@
+let site_data = {
+    site_name: "North Ember",
+    city: "Istanbul",
+    tagline: "Slow coffee, bright rooms, late records.",
+    hero_title: "A neighborhood coffee room with a warm pulse.",
+    hero_copy: "North Ember serves textured espresso, bright filter brews, and low-light evenings built for conversation.",
+    primary_cta: "Book a tasting table",
+    secondary_cta: "See the room",
+    story_title: "Designed like a listening bar, brewed like a roastery counter.",
+    story_copy: "The room opens with washed oak, rust lacquer, and daylight in the morning, then turns into an amber listening corner after sunset.",
+    story_points: [
+        "Seasonal espresso flights every Friday",
+        "Single-origin wall refreshed every two weeks",
+        "Quiet daytime tables with power and fast wifi"
+    ],
+    hours: "Mon-Sun / 08:00 - 23:00",
+    address: "Galata slope, Beyoglu / Istanbul",
+    phone: "+90 212 555 01 77",
+    signature_drinks: [
+        {name: "Cinder Latte", profile: "espresso, dark honey, velvet milk", price: 140, accent: "smoke"},
+        {name: "Apricot Tonic", profile: "cold brew, tonic, dried apricot", price: 150, accent: "bright"},
+        {name: "Forest Flat", profile: "espresso, pine syrup, microfoam", price: 145, accent: "green"},
+        {name: "Night Filter", profile: "washed ethiopia, jasmine finish", price: 135, accent: "floral"}
+    ],
+    beans: [
+        {name: "Halo", origin: "Ethiopia", notes: "jasmine, peach, bergamot", roast: "light"},
+        {name: "Sierra", origin: "Colombia", notes: "cacao, cherry, panela", roast: "medium"},
+        {name: "Tufa", origin: "Kenya", notes: "blackcurrant, citrus, syrup", roast: "light"}
+    ],
+    journal: [
+        {title: "Friday listening sets", text: "Analog soul, ambient jazz, and soft-volume sets from 20:00 to close."},
+        {title: "Morning brew lab", text: "Every Tuesday at 09:00 we open the brew bar for comparative pourovers."},
+        {title: "House pastry drop", text: "Burnt vanilla bun, olive oil cake, and sesame shortbread rotate weekly."}
+    ]
+}

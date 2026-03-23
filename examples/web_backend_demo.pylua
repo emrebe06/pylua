@@ -1,0 +1,42 @@
+import fs
+import json
+import time
+import lib.catalog_helpers
+
+let products = [
+    {id: 1, name: "Latte", price: 120},
+    {id: 2, name: "Mocha", price: 135},
+    {id: 3, name: "Filter", price: 95}
+]
+
+if not fs.exists("build/out") then
+    fs.mkdir("build/out", true)
+end
+
+json.write("build/out/request.json", {
+    framework: "fastapi",
+    route: "/catalog",
+    tags: ["coffee", "public"]
+})
+
+let request_data = json.read("build/out/request.json")
+let extra = json.loads(json.dumps({mode: "production", engine: "pylua"}))
+
+for product in products do
+    print(product.name)
+end
+
+for key in request_data do
+    print(key + "=" + json.encode(request_data[key]))
+end
+
+let response = {
+    generated_at: time.utc(),
+    framework: request_data.framework,
+    engine: extra.engine,
+    site: catalog_helpers.site_defaults,
+    total_price: catalog_helpers.total_price(products),
+    product_count: 3
+}
+
+print(json.encode(response))

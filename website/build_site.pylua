@@ -1,0 +1,300 @@
+import fs
+import json
+import time
+import lib.site_content
+
+if not fs.exists("website/dist") then
+    fs.mkdir("website/dist", true)
+end
+
+let html = "<!DOCTYPE html>\n" +
+"<html lang=\"en\">\n" +
+"<head>\n" +
+"  <meta charset=\"UTF-8\" />\n" +
+"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n" +
+"  <title>North Ember</title>\n" +
+"  <meta name=\"description\" content=\"North Ember is a cinematic coffee room built with PyLua.\" />\n" +
+"  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n" +
+"  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />\n" +
+"  <link href=\"https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap\" rel=\"stylesheet\" />\n" +
+"  <link rel=\"stylesheet\" href=\"./styles.css\" />\n" +
+"</head>\n" +
+"<body>\n" +
+"  <div class=\"page-shell\">\n" +
+"    <header class=\"topbar\">\n" +
+"      <div class=\"brand-lockup\">\n" +
+"        <span class=\"brand-mark\">NE</span>\n" +
+"        <div>\n" +
+"          <p class=\"eyebrow\">Coffee room</p>\n" +
+"          <h1 id=\"site-name\"></h1>\n" +
+"        </div>\n" +
+"      </div>\n" +
+"      <nav class=\"topnav\">\n" +
+"        <a href=\"#menu\">Menu</a>\n" +
+"        <a href=\"#beans\">Beans</a>\n" +
+"        <a href=\"#visit\">Visit</a>\n" +
+"      </nav>\n" +
+"    </header>\n" +
+"\n" +
+"    <main>\n" +
+"      <section class=\"hero-card\">\n" +
+"        <div class=\"hero-copy\">\n" +
+"          <p id=\"tagline\" class=\"eyebrow\"></p>\n" +
+"          <h2 id=\"hero-title\"></h2>\n" +
+"          <p id=\"hero-copy\" class=\"hero-text\"></p>\n" +
+"          <div class=\"hero-actions\">\n" +
+"            <a id=\"primary-cta\" class=\"button button-solid\" href=\"#visit\"></a>\n" +
+"            <a id=\"secondary-cta\" class=\"button button-ghost\" href=\"#story\"></a>\n" +
+"          </div>\n" +
+"        </div>\n" +
+"        <div class=\"hero-panel\">\n" +
+"          <div class=\"glow glow-a\"></div>\n" +
+"          <div class=\"glow glow-b\"></div>\n" +
+"          <div class=\"hero-note\">\n" +
+"            <p class=\"note-label\">Tonight</p>\n" +
+"            <strong>Espresso flight + vinyl session</strong>\n" +
+"            <span id=\"city-line\"></span>\n" +
+"          </div>\n" +
+"        </div>\n" +
+"      </section>\n" +
+"\n" +
+"      <section id=\"story\" class=\"section-grid story-grid\">\n" +
+"        <article class=\"story-card panel\">\n" +
+"          <p class=\"eyebrow\">Atmosphere</p>\n" +
+"          <h3 id=\"story-title\"></h3>\n" +
+"          <p id=\"story-copy\"></p>\n" +
+"          <ul id=\"story-points\" class=\"point-list\"></ul>\n" +
+"        </article>\n" +
+"        <aside class=\"hours-card panel\">\n" +
+"          <p class=\"eyebrow\">Room details</p>\n" +
+"          <div class=\"detail-row\"><span>Open</span><strong id=\"hours\"></strong></div>\n" +
+"          <div class=\"detail-row\"><span>Address</span><strong id=\"address\"></strong></div>\n" +
+"          <div class=\"detail-row\"><span>Phone</span><strong id=\"phone\"></strong></div>\n" +
+"          <div class=\"stamp\">Built with PyLua / <span id=\"generated-at\"></span></div>\n" +
+"        </aside>\n" +
+"      </section>\n" +
+"\n" +
+"      <section id=\"menu\" class=\"section-block\">\n" +
+"        <div class=\"section-heading\">\n" +
+"          <p class=\"eyebrow\">Signature drinks</p>\n" +
+"          <h3>Structured for daylight, textured for late hours.</h3>\n" +
+"        </div>\n" +
+"        <div id=\"signature-grid\" class=\"card-grid\"></div>\n" +
+"      </section>\n" +
+"\n" +
+"      <section id=\"beans\" class=\"section-block split-block\">\n" +
+"        <div class=\"section-heading compact-heading\">\n" +
+"          <p class=\"eyebrow\">Bean wall</p>\n" +
+"          <h3>Rotating origins with clean roast profiles.</h3>\n" +
+"        </div>\n" +
+"        <div id=\"bean-grid\" class=\"bean-grid\"></div>\n" +
+"      </section>\n" +
+"\n" +
+"      <section class=\"section-block\">\n" +
+"        <div class=\"section-heading\">\n" +
+"          <p class=\"eyebrow\">House journal</p>\n" +
+"          <h3>What the room is doing this week.</h3>\n" +
+"        </div>\n" +
+"        <div id=\"journal-grid\" class=\"journal-grid\"></div>\n" +
+"      </section>\n" +
+"    </main>\n" +
+"\n" +
+"    <footer id=\"visit\" class=\"footer-panel\">\n" +
+"      <div>\n" +
+"        <p class=\"eyebrow\">Visit</p>\n" +
+"        <h3>Walk in for coffee, stay for the room.</h3>\n" +
+"      </div>\n" +
+"      <div class=\"footer-meta\">\n" +
+"        <span id=\"footer-city\"></span>\n" +
+"        <span>Open daily</span>\n" +
+"      </div>\n" +
+"    </footer>\n" +
+"  </div>\n" +
+"  <script src=\"./app.js\"></script>\n" +
+"</body>\n" +
+"</html>\n"
+
+let css = ":root {\n" +
+"  --bg: #f5ecdd;\n" +
+"  --paper: rgba(255, 248, 236, 0.78);\n" +
+"  --ink: #1e1d19;\n" +
+"  --muted: #62584f;\n" +
+"  --rust: #b75b39;\n" +
+"  --forest: #2d5d50;\n" +
+"  --gold: #d2a55d;\n" +
+"  --line: rgba(30, 29, 25, 0.12);\n" +
+"  --shadow: 0 22px 60px rgba(56, 34, 14, 0.14);\n" +
+"}\n" +
+"* { box-sizing: border-box; }\n" +
+"html { scroll-behavior: smooth; }\n" +
+"body {\n" +
+"  margin: 0;\n" +
+"  font-family: 'Space Grotesk', sans-serif;\n" +
+"  color: var(--ink);\n" +
+"  background:\n" +
+"    radial-gradient(circle at top left, rgba(210, 165, 93, 0.22), transparent 32%),\n" +
+"    radial-gradient(circle at 85% 15%, rgba(45, 93, 80, 0.18), transparent 24%),\n" +
+"    linear-gradient(180deg, #f8f1e6 0%, #f1e4d0 100%);\n" +
+"  min-height: 100vh;\n" +
+"}\n" +
+".page-shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 48px; }\n" +
+".topbar, .hero-card, .panel, .section-block, .footer-panel {\n" +
+"  backdrop-filter: blur(14px);\n" +
+"  background: var(--paper);\n" +
+"  border: 1px solid var(--line);\n" +
+"  box-shadow: var(--shadow);\n" +
+"}\n" +
+".topbar {\n" +
+"  display: flex; justify-content: space-between; align-items: center; gap: 20px;\n" +
+"  border-radius: 24px; padding: 18px 22px; margin-bottom: 22px;\n" +
+"}\n" +
+".brand-lockup { display: flex; align-items: center; gap: 16px; }\n" +
+".brand-mark {\n" +
+"  width: 52px; height: 52px; display: grid; place-items: center; border-radius: 18px;\n" +
+"  background: linear-gradient(135deg, var(--rust), var(--gold)); color: white; font-weight: 700;\n" +
+"}\n" +
+".topbar h1, .hero-card h2, .section-heading h3, .story-card h3, .footer-panel h3 {\n" +
+"  font-family: 'Fraunces', serif; margin: 0; letter-spacing: -0.03em;\n" +
+"}\n" +
+".topbar h1 { font-size: 1.2rem; }\n" +
+".eyebrow {\n" +
+"  text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.72rem; color: var(--muted); margin: 0 0 8px;\n" +
+"}\n" +
+".topnav { display: flex; gap: 16px; flex-wrap: wrap; }\n" +
+".topnav a, .button { text-decoration: none; color: var(--ink); }\n" +
+".topnav a { position: relative; font-size: 0.95rem; }\n" +
+".topnav a::after {\n" +
+"  content: ''; position: absolute; left: 0; bottom: -4px; width: 100%; height: 1px; background: var(--ink);\n" +
+"  transform: scaleX(0); transform-origin: left; transition: transform 180ms ease;\n" +
+"}\n" +
+".topnav a:hover::after { transform: scaleX(1); }\n" +
+".hero-card {\n" +
+"  display: grid; grid-template-columns: 1.25fr 0.9fr; gap: 22px; border-radius: 34px; padding: 28px; overflow: hidden;\n" +
+"}\n" +
+".hero-copy { padding: 10px 6px 10px 2px; }\n" +
+".hero-copy h2 { font-size: clamp(2.6rem, 6vw, 5.8rem); line-height: 0.95; max-width: 10ch; }\n" +
+".hero-text { max-width: 54ch; font-size: 1.02rem; color: var(--muted); line-height: 1.7; margin: 18px 0 0; }\n" +
+".hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }\n" +
+".button {\n" +
+"  display: inline-flex; align-items: center; justify-content: center; padding: 14px 18px; border-radius: 999px;\n" +
+"  border: 1px solid var(--ink); font-size: 0.94rem; transition: transform 180ms ease, background 180ms ease;\n" +
+"}\n" +
+".button:hover { transform: translateY(-2px); }\n" +
+".button-solid { background: var(--ink); color: #f8f1e6; border-color: var(--ink); }\n" +
+".button-ghost { background: transparent; }\n" +
+".hero-panel {\n" +
+"  position: relative; min-height: 360px; border-radius: 28px; overflow: hidden;\n" +
+"  background: linear-gradient(180deg, rgba(32, 28, 22, 0.88), rgba(95, 52, 31, 0.86));\n" +
+"}\n" +
+".glow { position: absolute; border-radius: 999px; filter: blur(12px); opacity: 0.82; }\n" +
+".glow-a { width: 240px; height: 240px; background: rgba(210, 165, 93, 0.44); top: -24px; right: -40px; }\n" +
+".glow-b { width: 210px; height: 210px; background: rgba(113, 177, 155, 0.28); bottom: 22px; left: -28px; }\n" +
+".hero-note {\n" +
+"  position: absolute; left: 24px; right: 24px; bottom: 24px; padding: 20px; border-radius: 22px;\n" +
+"  background: rgba(255, 247, 233, 0.12); border: 1px solid rgba(255, 255, 255, 0.16); color: #fff4e4;\n" +
+"}\n" +
+".hero-note strong { display: block; font-size: 1.2rem; margin: 6px 0 10px; }\n" +
+".hero-note span, .note-label { color: rgba(255, 244, 228, 0.76); }\n" +
+".section-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; margin-top: 22px; }\n" +
+".panel, .section-block, .footer-panel { border-radius: 28px; padding: 24px; }\n" +
+".story-card p:last-of-type { color: var(--muted); line-height: 1.7; }\n" +
+".point-list { margin: 18px 0 0; padding-left: 18px; color: var(--ink); display: grid; gap: 10px; }\n" +
+".detail-row { display: flex; justify-content: space-between; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }\n" +
+".detail-row span { color: var(--muted); }\n" +
+".stamp { margin-top: 18px; color: var(--muted); font-size: 0.92rem; }\n" +
+".section-block { margin-top: 22px; }\n" +
+".section-heading { display: flex; justify-content: space-between; gap: 22px; align-items: end; margin-bottom: 20px; }\n" +
+".section-heading h3 { font-size: clamp(1.8rem, 4vw, 3rem); max-width: 12ch; }\n" +
+".compact-heading { margin-bottom: 18px; }\n" +
+".card-grid, .bean-grid, .journal-grid { display: grid; gap: 18px; }\n" +
+".card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }\n" +
+".bean-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }\n" +
+".journal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }\n" +
+".menu-card, .bean-card, .journal-card {\n" +
+"  position: relative; overflow: hidden; min-height: 220px; border-radius: 24px; padding: 20px;\n" +
+"  background: linear-gradient(180deg, rgba(255, 250, 242, 0.92), rgba(248, 235, 213, 0.9)); border: 1px solid var(--line);\n" +
+"}\n" +
+".menu-card::before, .bean-card::before, .journal-card::before {\n" +
+"  content: ''; position: absolute; inset: 0; background: linear-gradient(130deg, transparent, rgba(255, 255, 255, 0.38)); opacity: 0;\n" +
+"  transition: opacity 220ms ease;\n" +
+"}\n" +
+".menu-card:hover::before, .bean-card:hover::before, .journal-card:hover::before { opacity: 1; }\n" +
+".accent-pill {\n" +
+"  display: inline-flex; padding: 6px 10px; border-radius: 999px; background: rgba(30, 29, 25, 0.06);\n" +
+"  color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.68rem;\n" +
+"}\n" +
+".menu-card h4, .bean-card h4, .journal-card h4 { margin: 18px 0 10px; font-size: 1.16rem; }\n" +
+".menu-card p, .bean-card p, .journal-card p { margin: 0; color: var(--muted); line-height: 1.6; }\n" +
+".price-line { margin-top: 18px; font-weight: 700; color: var(--rust); }\n" +
+".footer-panel {\n" +
+"  margin-top: 22px; display: flex; justify-content: space-between; gap: 18px; align-items: center;\n" +
+"  background: linear-gradient(135deg, rgba(30, 29, 25, 0.92), rgba(78, 44, 24, 0.92)); color: #f7ebd7;\n" +
+"}\n" +
+".footer-meta { display: flex; gap: 14px; flex-wrap: wrap; color: rgba(247, 235, 215, 0.78); }\n" +
+"@media (max-width: 980px) {\n" +
+"  .hero-card, .section-grid, .card-grid, .bean-grid, .journal-grid { grid-template-columns: 1fr; }\n" +
+"  .section-heading { align-items: start; flex-direction: column; }\n" +
+"}\n" +
+"@media (max-width: 720px) {\n" +
+"  .page-shell { width: min(100% - 20px, 1180px); padding-top: 18px; }\n" +
+"  .topbar, .hero-card, .panel, .section-block, .footer-panel { border-radius: 22px; }\n" +
+"  .topbar, .footer-panel { flex-direction: column; align-items: start; }\n" +
+"  .hero-card { padding: 20px; }\n" +
+"  .hero-copy h2 { font-size: 2.8rem; }\n" +
+"}\n"
+
+let generated_at = time.utc()
+
+let app = "const SITE_DATA = " + json.encode(site_content.site_data) + ";\n" +
+"const GENERATED_AT = \"" + generated_at + "\";\n" +
+"const byId = (id) => document.getElementById(id);\n" +
+"const money = (value) => `TRY ${value}`;\n" +
+"byId('site-name').textContent = SITE_DATA.site_name;\n" +
+"byId('tagline').textContent = SITE_DATA.tagline;\n" +
+"byId('hero-title').textContent = SITE_DATA.hero_title;\n" +
+"byId('hero-copy').textContent = SITE_DATA.hero_copy;\n" +
+"byId('primary-cta').textContent = SITE_DATA.primary_cta;\n" +
+"byId('secondary-cta').textContent = SITE_DATA.secondary_cta;\n" +
+"byId('city-line').textContent = `${SITE_DATA.city} / ${SITE_DATA.hours}`;\n" +
+"byId('story-title').textContent = SITE_DATA.story_title;\n" +
+"byId('story-copy').textContent = SITE_DATA.story_copy;\n" +
+"byId('hours').textContent = SITE_DATA.hours;\n" +
+"byId('address').textContent = SITE_DATA.address;\n" +
+"byId('phone').textContent = SITE_DATA.phone;\n" +
+"byId('generated-at').textContent = GENERATED_AT;\n" +
+"byId('footer-city').textContent = SITE_DATA.city;\n" +
+"const storyMarkup = SITE_DATA.story_points.map((point) => `<li>${point}</li>`).join('');\n" +
+"byId('story-points').innerHTML = storyMarkup;\n" +
+"const signatureMarkup = SITE_DATA.signature_drinks.map((drink) => `\n" +
+"  <article class='menu-card'>\n" +
+"    <span class='accent-pill'>${drink.accent}</span>\n" +
+"    <h4>${drink.name}</h4>\n" +
+"    <p>${drink.profile}</p>\n" +
+"    <div class='price-line'>${money(drink.price)}</div>\n" +
+"  </article>\n" +
+"`).join('');\n" +
+"byId('signature-grid').innerHTML = signatureMarkup;\n" +
+"const beanMarkup = SITE_DATA.beans.map((bean) => `\n" +
+"  <article class='bean-card'>\n" +
+"    <span class='accent-pill'>${bean.roast}</span>\n" +
+"    <h4>${bean.name}</h4>\n" +
+"    <p>${bean.origin}</p>\n" +
+"    <p>${bean.notes}</p>\n" +
+"  </article>\n" +
+"`).join('');\n" +
+"byId('bean-grid').innerHTML = beanMarkup;\n" +
+"const journalMarkup = SITE_DATA.journal.map((entry) => `\n" +
+"  <article class='journal-card'>\n" +
+"    <span class='accent-pill'>house note</span>\n" +
+"    <h4>${entry.title}</h4>\n" +
+"    <p>${entry.text}</p>\n" +
+"  </article>\n" +
+"`).join('');\n" +
+"byId('journal-grid').innerHTML = journalMarkup;\n"
+
+fs.write_text("website/dist/index.html", html)
+fs.write_text("website/dist/styles.css", css)
+fs.write_text("website/dist/app.js", app)
+json.write("website/dist/site_data.json", site_content.site_data)
+
+print("website built at website/dist")

@@ -1,0 +1,4 @@
+import web
+
+print("North Ember local server starting")
+web.serve_static("website/dist", 8080)

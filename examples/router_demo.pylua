@@ -1,0 +1,42 @@
+import web
+import time
+import security
+import compute
+
+let app = web.router()
+const api_key = "demo-key"
+
+func auth(ctx)
+    if ctx.request.path == "/health" then
+        return nil
+    end
+
+    let provided = ctx.request.headers["x-api-key"]
+    if not security.constant_time_equals(provided, api_key) then
+        return web.json({error: "unauthorized"}, 401)
+    end
+
+    return nil
+end
+
+func health(ctx)
+    return web.json({
+        status: "ok",
+        now: time.utc()
+    }, 200)
+end
+
+func info(ctx)
+    let caps = compute.capabilities()
+    return web.json({
+        message: "PyLua router",
+        path: ctx.request.path,
+        backend: caps.preferred_backend,
+        cpu_threads: caps.cpu_threads
+    }, 200)
+end
+
+app.use(auth)
+app.get("/health", health)
+app.get("/info", info)
+app.listen(8092)

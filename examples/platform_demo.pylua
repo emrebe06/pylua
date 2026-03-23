@@ -1,0 +1,24 @@
+import compute
+import cpu
+import gpu
+import cuda
+import fsl
+import security
+import json
+
+let caps = compute.capabilities()
+let cpu_info = cpu.info()
+let gpu_info = gpu.info()
+let cuda_info = cuda.info()
+
+let out_path = fsl.safe_join("build", "out/platform.json")
+let payload = {
+    capabilities: caps,
+    cpu: cpu_info,
+    gpu: gpu_info,
+    cuda: cuda_info,
+    token_preview: security.issue_token(12)
+}
+
+fsl.write_json(out_path, payload)
+print(json.encode(payload))

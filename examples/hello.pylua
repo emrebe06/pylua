@@ -1,0 +1,23 @@
+# Native .pylua script
+
+func greet(name)
+    if name == "dunya" then
+        return "Merhaba dunya"
+    elseif name == "motor" then
+        return "PyLua motoru calisiyor"
+    else
+        return "Merhaba " + name
+    end
+end
+
+let counter = 0
+
+while counter < 3 do
+    print("tur " + counter)
+    counter = counter + 1
+end
+
+print(greet("motor"))
+
+const version = "0.1"
+print("surum " + version)

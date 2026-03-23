@@ -1,0 +1,13 @@
+let site_defaults = {
+    name: "PyLua Roastery",
+    city: "Istanbul",
+    currency: "TRY"
+}
+
+func total_price(products)
+    let total = 0
+    for product in products do
+        total = total + product.price
+    end
+    return total
+end
