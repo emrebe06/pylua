@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include <ostream>
 
-#include "pylua/ast.hpp"
-#include "pylua/bytecode.hpp"
+#include "lunara/ast.hpp"
+#include "lunara/bytecode.hpp"
 
-namespace pylua {
+namespace lunara {
 
 class VmCompiler {
   public:
@@ -22,4 +22,5 @@ class VirtualMachine {
     std::ostream* output_;
 };
 
-}  // namespace pylua
+}  // namespace lunara
+

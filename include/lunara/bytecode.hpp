@@ -1,13 +1,13 @@
-#pragma once
+﻿#pragma once
 
 #include <cstddef>
 #include <cstdint>
 #include <string>
 #include <vector>
 
-#include "pylua/runtime.hpp"
+#include "lunara/runtime.hpp"
 
-namespace pylua::bytecode {
+namespace lunara::bytecode {
 
 enum class OpCode : std::uint8_t {
     LoadConst,
@@ -55,4 +55,5 @@ struct Chunk {
 
 std::string opcode_name(OpCode op);
 
-}  // namespace pylua::bytecode
+}  // namespace lunara::bytecode
+

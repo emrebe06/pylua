@@ -1,6 +1,6 @@
-# PyLua Engine MVP
+﻿# Lunara Engine MVP
 
-`PyLua`, `.pylua` dosyalarini dogrudan calistiran native bir dil motoru iskeletidir.
+`Lunara`, `.lunara` dosyalarini dogrudan calistiran native bir dil motoru iskeletidir.
 
 Bu ilk surum su pipeline'i gercekten calistirir:
 
@@ -38,50 +38,50 @@ cmake --build build
 ## Calistirma
 
 ```powershell
-.\build\Debug\pylua.exe .\examples\hello.pylua
-.\build\Debug\pylua.exe run .\examples\hello.pylua
-.\build\Debug\pylua.exe vm .\examples\vm_demo.pylua
-.\build\Debug\pylua.exe check .\examples\hello.pylua
-.\build\Debug\pylua.exe .\examples\catalog.pylua
-.\build\Debug\pylua.exe .\examples\web_backend_demo.pylua
+.\build\Debug\lunara.exe .\examples\hello.lunara
+.\build\Debug\lunara.exe run .\examples\hello.lunara
+.\build\Debug\lunara.exe vm .\examples\vm_demo.lunara
+.\build\Debug\lunara.exe check .\examples\hello.lunara
+.\build\Debug\lunara.exe .\examples\catalog.lunara
+.\build\Debug\lunara.exe .\examples\web_backend_demo.lunara
 ```
 
 ## Python uyumu
 
-`python/pylua_bridge.py`, native motoru Python backend'lerden cagirmak icin ince bir bridge saglar.
+`python/lunara_bridge.py`, native motoru Python backend'lerden cagirmak icin ince bir bridge saglar.
 
 ```python
 from pathlib import Path
-from pylua_bridge import PyLuaBridge
+from lunara_bridge import LunaraBridge
 
 root = Path(__file__).resolve().parents[1]
-bridge = PyLuaBridge()
-payload = bridge.run_json(root / "examples" / "web_backend_demo.pylua", cwd=root)
+bridge = LunaraBridge()
+payload = bridge.run_json(root / "examples" / "web_backend_demo.lunara", cwd=root)
 print(payload["framework"])
 ```
 
-Bridge, script'in son satirdaki JSON ciktisini parse eder. Bu sayede Flask/FastAPI gibi Python taraflari PyLua'yi subprocess ile cagirabilir.
+Bridge, script'in son satirdaki JSON ciktisini parse eder. Bu sayede Flask/FastAPI gibi Python taraflari Lunara'yi subprocess ile cagirabilir.
 
 Shared library / embed yolu icin:
 
 ```python
-from pylua_embed_ctypes import PyLuaEmbed
+from lunara_embed_ctypes import LunaraEmbed
 
-embed = PyLuaEmbed()
-print(embed.run_file("examples/vm_demo.pylua", backend="vm"))
+embed = LunaraEmbed()
+print(embed.run_file("examples/vm_demo.lunara", backend="vm"))
 print(embed.run_source('print("embed ok")'))
 ```
 
-Bu yol `build/Debug/pylua_embed.dll` uzerinden `ctypes` ile dogrudan embedding yapar.
+Bu yol `build/Debug/lunara_embed.dll` uzerinden `ctypes` ile dogrudan embedding yapar.
 
 ## Mimari
 
-- `include/pylua/token.hpp`: token tanimlari
-- `include/pylua/lexer.hpp`: kaynak kodu tokenlara boler
-- `include/pylua/ast.hpp`: AST dugumleri
-- `include/pylua/parser.hpp`: recursive descent parser
-- `include/pylua/runtime.hpp`: runtime value ve environment modeli
-- `include/pylua/interpreter.hpp`: AST interpreter arabirimi
+- `include/lunara/token.hpp`: token tanimlari
+- `include/lunara/lexer.hpp`: kaynak kodu tokenlara boler
+- `include/lunara/ast.hpp`: AST dugumleri
+- `include/lunara/parser.hpp`: recursive descent parser
+- `include/lunara/runtime.hpp`: runtime value ve environment modeli
+- `include/lunara/interpreter.hpp`: AST interpreter arabirimi
 - `src/*.cpp`: motorun native implementasyonu
 
 ## Sonraki fazlar
@@ -89,3 +89,4 @@ Bu yol `build/Debug/pylua_embed.dll` uzerinden `ctypes` ile dogrudan embedding y
 - bytecode compiler
 - stack-based VM
 - native plugin/FFI API
+

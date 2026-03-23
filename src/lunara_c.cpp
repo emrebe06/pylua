@@ -1,4 +1,4 @@
-#include "pylua/pylua_c.h"
+﻿#include "lunara/lunara_c.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "pylua/engine.hpp"
+#include "lunara/engine.hpp"
 
 namespace {
 
@@ -23,11 +23,11 @@ char* copy_c_string(const std::string& text) {
 
 extern "C" {
 
-const char* pylua_run_file(const char* script_path, const char* backend, int* exit_code) {
+const char* lunara_run_file(const char* script_path, const char* backend, int* exit_code) {
     std::ostringstream output;
     try {
-        const auto parsed_backend = pylua::engine::parse_backend(backend ? backend : "interpreter");
-        pylua::engine::run_file(script_path, parsed_backend, output);
+        const auto parsed_backend = lunara::engine::parse_backend(backend ? backend : "interpreter");
+        lunara::engine::run_file(script_path, parsed_backend, output);
         if (exit_code) {
             *exit_code = 0;
         }
@@ -40,11 +40,11 @@ const char* pylua_run_file(const char* script_path, const char* backend, int* ex
     }
 }
 
-const char* pylua_run_source(const char* source, const char* virtual_path, const char* backend, int* exit_code) {
+const char* lunara_run_source(const char* source, const char* virtual_path, const char* backend, int* exit_code) {
     std::ostringstream output;
     try {
-        const auto parsed_backend = pylua::engine::parse_backend(backend ? backend : "interpreter");
-        pylua::engine::run_source(source ? source : "", virtual_path ? virtual_path : "<memory>", parsed_backend, output);
+        const auto parsed_backend = lunara::engine::parse_backend(backend ? backend : "interpreter");
+        lunara::engine::run_source(source ? source : "", virtual_path ? virtual_path : "<memory>", parsed_backend, output);
         if (exit_code) {
             *exit_code = 0;
         }
@@ -57,8 +57,9 @@ const char* pylua_run_source(const char* source, const char* virtual_path, const
     }
 }
 
-void pylua_string_free(const char* value) {
+void lunara_string_free(const char* value) {
     std::free(const_cast<char*>(value));
 }
 
 }
+

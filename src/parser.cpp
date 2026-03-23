@@ -1,9 +1,9 @@
-#include "pylua/parser.hpp"
+﻿#include "lunara/parser.hpp"
 
 #include <sstream>
 #include <stdexcept>
 
-namespace pylua {
+namespace lunara {
 
 namespace {
 
@@ -425,4 +425,5 @@ bool Parser::is_block_terminator(const std::vector<TokenType>& terminators) cons
     return false;
 }
 
-}  // namespace pylua
+}  // namespace lunara
+

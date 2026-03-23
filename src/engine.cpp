@@ -1,4 +1,4 @@
-#include "pylua/engine.hpp"
+﻿#include "lunara/engine.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -6,12 +6,12 @@
 #include <stdexcept>
 #include <string>
 
-#include "pylua/interpreter.hpp"
-#include "pylua/lexer.hpp"
-#include "pylua/parser.hpp"
-#include "pylua/vm.hpp"
+#include "lunara/interpreter.hpp"
+#include "lunara/lexer.hpp"
+#include "lunara/parser.hpp"
+#include "lunara/vm.hpp"
 
-namespace pylua::engine {
+namespace lunara::engine {
 
 namespace {
 
@@ -82,4 +82,5 @@ void run_file(const std::filesystem::path& script_path, Backend backend, std::os
     run_source(read_file(script_path), script_path, backend, output);
 }
 
-}  // namespace pylua::engine
+}  // namespace lunara::engine
+

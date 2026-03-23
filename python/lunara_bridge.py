@@ -1,17 +1,17 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import subprocess
 from pathlib import Path
 
 
-class PyLuaBridge:
+class LunaraBridge:
     def __init__(self, engine_path: str | Path | None = None) -> None:
         base = Path(__file__).resolve().parents[1]
         candidates = [
-            base / "build" / "Debug" / "pylua.exe",
-            base / "build" / "Release" / "pylua.exe",
-            base / "build" / "pylua.exe",
+            base / "build" / "Debug" / "lunara.exe",
+            base / "build" / "Release" / "lunara.exe",
+            base / "build" / "lunara.exe",
         ]
         self.engine_path = Path(engine_path) if engine_path else next((path for path in candidates if path.exists()), candidates[0])
 
@@ -31,8 +31,9 @@ class PyLuaBridge:
         output = self.run(script_path, cwd=cwd)
         lines = [line.strip() for line in output.splitlines() if line.strip()]
         if not lines:
-            raise ValueError("PyLua script did not emit any output")
+            raise ValueError("Lunara script did not emit any output")
         return json.loads(lines[-1])
 
 
-__all__ = ["PyLuaBridge"]
+__all__ = ["LunaraBridge"]
+

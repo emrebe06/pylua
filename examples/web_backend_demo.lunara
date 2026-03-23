@@ -1,4 +1,4 @@
-import fs
+﻿import fs
 import json
 import time
 import lib.catalog_helpers
@@ -20,7 +20,7 @@ json.write("build/out/request.json", {
 })
 
 let request_data = json.read("build/out/request.json")
-let extra = json.loads(json.dumps({mode: "production", engine: "pylua"}))
+let extra = json.loads(json.dumps({mode: "production", engine: "lunara"}))
 
 for product in products do
     print(product.name)
@@ -40,3 +40,4 @@ let response = {
 }
 
 print(json.encode(response))
+

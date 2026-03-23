@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$Version = "0.1.0",
     [string]$BuildDir = "build-installer",
     [string]$OutDir = "dist\windows"
@@ -12,8 +12,8 @@ $outDir = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $OutDir))
 $stageRoot = Join-Path $outDir "stage"
 $payloadDir = Join-Path $stageRoot "payload"
 $bundleDir = Join-Path $stageRoot "bundle"
-$installerExe = Join-Path $outDir ("PyLua-Setup-" + $Version + ".exe")
-$sedPath = Join-Path $stageRoot "PyLuaSetup.sed"
+$installerExe = Join-Path $outDir ("Lunara-Setup-" + $Version + ".exe")
+$sedPath = Join-Path $stageRoot "LunaraSetup.sed"
 
 Write-Host "Configuring Release build..."
 cmake -S $repoRoot -B $buildDir | Out-Host
@@ -67,9 +67,9 @@ CAB_ResvCodeSigning=0
 RebootMode=N
 InstallPrompt=
 DisplayLicense=
-FinishMessage=PyLua installation package is ready.
+FinishMessage=Lunara installation package is ready.
 TargetName=$installerExe
-FriendlyName=PyLua Setup $Version
+FriendlyName=Lunara Setup $Version
 AppLaunched=install.cmd
 PostInstallCmd=<None>
 AdminQuietInstCmd=install.cmd -Quiet
@@ -94,3 +94,4 @@ if (-not (Test-Path $installerExe)) {
 
 Write-Host "Installer ready:"
 Write-Host $installerExe
+

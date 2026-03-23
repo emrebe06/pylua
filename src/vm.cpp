@@ -1,4 +1,4 @@
-#include "pylua/vm.hpp"
+﻿#include "lunara/vm.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-namespace pylua::bytecode {
+namespace lunara::bytecode {
 
 std::string opcode_name(OpCode op) {
     switch (op) {
@@ -41,9 +41,9 @@ std::string opcode_name(OpCode op) {
     return "Unknown";
 }
 
-}  // namespace pylua::bytecode
+}  // namespace lunara::bytecode
 
-namespace pylua {
+namespace lunara {
 
 namespace {
 
@@ -499,4 +499,5 @@ void VirtualMachine::execute(const bytecode::Chunk& chunk) {
     }
 }
 
-}  // namespace pylua
+}  // namespace lunara
+

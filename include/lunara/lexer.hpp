@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 #include <vector>
 
-#include "pylua/token.hpp"
+#include "lunara/token.hpp"
 
-namespace pylua {
+namespace lunara {
 
 class Lexer {
   public:
@@ -37,4 +37,5 @@ class Lexer {
     int token_column_ = 1;
 };
 
-}  // namespace pylua
+}  // namespace lunara
+

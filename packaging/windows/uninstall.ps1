@@ -1,20 +1,20 @@
-param(
+﻿param(
     [string]$InstallDir = ""
 )
 
 $ErrorActionPreference = "Stop"
 
 if ([string]::IsNullOrWhiteSpace($InstallDir)) {
-    if ($env:PYLUA_HOME) {
-        $InstallDir = $env:PYLUA_HOME
+    if ($env:LUNARA_HOME) {
+        $InstallDir = $env:LUNARA_HOME
     } else {
-        $InstallDir = Join-Path $env:LOCALAPPDATA "Programs\PyLua"
+        $InstallDir = Join-Path $env:LOCALAPPDATA "Programs\Lunara"
     }
 }
 
 $installDir = [System.IO.Path]::GetFullPath($InstallDir)
 $binDir = Join-Path $installDir "bin"
-$startMenuDir = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\PyLua"
+$startMenuDir = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Lunara"
 $manifestPath = Join-Path $installDir "install_manifest.json"
 $manifest = $null
 
@@ -32,7 +32,7 @@ if ($currentPath) {
     [Environment]::SetEnvironmentVariable("Path", ($entries -join ';'), "User")
 }
 
-[Environment]::SetEnvironmentVariable("PYLUA_HOME", $null, "User")
+[Environment]::SetEnvironmentVariable("LUNARA_HOME", $null, "User")
 
 if (Test-Path $startMenuDir) {
     Remove-Item -Path $startMenuDir -Recurse -Force
@@ -43,7 +43,8 @@ if (Test-Path $installDir) {
 }
 
 if ($manifest -and $manifest.version) {
-    Write-Host ("PyLua " + $manifest.version + " removed from " + $installDir)
+    Write-Host ("Lunara " + $manifest.version + " removed from " + $installDir)
 } else {
-    Write-Host "PyLua removed from $installDir"
+    Write-Host "Lunara removed from $installDir"
 }
+

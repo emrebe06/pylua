@@ -1,10 +1,10 @@
-# Native .pylua script
+﻿# Native .lunara script
 
 func greet(name)
     if name == "dunya" then
         return "Merhaba dunya"
     elseif name == "motor" then
-        return "PyLua motoru calisiyor"
+        return "Lunara motoru calisiyor"
     else
         return "Merhaba " + name
     end
@@ -21,3 +21,4 @@ print(greet("motor"))
 
 const version = "0.1"
 print("surum " + version)
+

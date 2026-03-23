@@ -1,10 +1,10 @@
-#include "pylua/lexer.hpp"
+﻿#include "lunara/lexer.hpp"
 
 #include <cctype>
 #include <stdexcept>
 #include <unordered_map>
 
-namespace pylua {
+namespace lunara {
 
 namespace {
 
@@ -340,4 +340,5 @@ void Lexer::add_token(TokenType type) {
         "Lexer error at line " + std::to_string(token_line_) + ", column " + std::to_string(token_column_) + ": " + message);
 }
 
-}  // namespace pylua
+}  // namespace lunara
+

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <filesystem>
 #include <memory>
@@ -7,10 +7,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "pylua/ast.hpp"
-#include "pylua/runtime.hpp"
+#include "lunara/ast.hpp"
+#include "lunara/runtime.hpp"
 
-namespace pylua {
+namespace lunara {
 
 class Interpreter {
   public:
@@ -35,4 +35,5 @@ class Interpreter {
     std::ostream* output_;
 };
 
-}  // namespace pylua
+}  // namespace lunara
+

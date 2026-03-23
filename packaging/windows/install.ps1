@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$InstallDir = "",
     [switch]$Quiet
 )
@@ -21,13 +21,13 @@ function Get-DefaultInstallDir {
     if (-not [string]::IsNullOrWhiteSpace($script:RequestedInstallDir)) {
         return [System.IO.Path]::GetFullPath($script:RequestedInstallDir)
     }
-    if ($env:PYLUA_INSTALL_DIR) {
-        return [System.IO.Path]::GetFullPath($env:PYLUA_INSTALL_DIR)
+    if ($env:LUNARA_INSTALL_DIR) {
+        return [System.IO.Path]::GetFullPath($env:LUNARA_INSTALL_DIR)
     }
-    if ($env:PYLUA_HOME) {
-        return [System.IO.Path]::GetFullPath($env:PYLUA_HOME)
+    if ($env:LUNARA_HOME) {
+        return [System.IO.Path]::GetFullPath($env:LUNARA_HOME)
     }
-    return [System.IO.Path]::GetFullPath((Join-Path $env:LOCALAPPDATA "Programs\PyLua"))
+    return [System.IO.Path]::GetFullPath((Join-Path $env:LOCALAPPDATA "Programs\Lunara"))
 }
 
 function Get-InstallerVersion {
@@ -43,7 +43,7 @@ function Get-LicenseText {
     if (Test-Path $licenseFile) {
         return Get-Content $licenseFile -Raw
     }
-    return "PyLua Preview License`r`n`r`nThis build is provided as a preview runtime for evaluation and development use."
+    return "Lunara Preview License`r`n`r`nThis build is provided as a preview runtime for evaluation and development use."
 }
 
 function Get-ManifestPath {
@@ -71,13 +71,13 @@ function Get-InstallMode {
     )
 
     $manifest = Read-InstallManifest $TargetDir
-    $binExe = Join-Path $TargetDir "bin\pylua.exe"
+    $binExe = Join-Path $TargetDir "bin\lunara.exe"
 
     if (-not $manifest -and -not (Test-Path $binExe)) {
         return @{
             Mode = "install"
             Label = "Fresh install"
-            Details = "PyLua bu klasore ilk kez kurulacak."
+            Details = "Lunara bu klasore ilk kez kurulacak."
             ExistingVersion = ""
         }
     }
@@ -91,7 +91,7 @@ function Get-InstallMode {
         return @{
             Mode = "repair"
             Label = "Repair / overwrite"
-            Details = "Bu klasorde mevcut bir PyLua kurulumu bulundu. Dosyalar yenilenerek tekrar kurulacak."
+            Details = "Bu klasorde mevcut bir Lunara kurulumu bulundu. Dosyalar yenilenerek tekrar kurulacak."
             ExistingVersion = ""
         }
     }
@@ -103,7 +103,7 @@ function Get-InstallMode {
             return @{
                 Mode = "upgrade"
                 Label = "Upgrade"
-                Details = "Mevcut PyLua $existingVersion kurulumu bulundu. $NewVersion surumune upgrade yapilacak."
+                Details = "Mevcut Lunara $existingVersion kurulumu bulundu. $NewVersion surumune upgrade yapilacak."
                 ExistingVersion = $existingVersion
             }
         }
@@ -111,7 +111,7 @@ function Get-InstallMode {
             return @{
                 Mode = "downgrade"
                 Label = "Downgrade"
-                Details = "Mevcut PyLua $existingVersion kurulumu bulundu. $NewVersion surumune geri alinacak."
+                Details = "Mevcut Lunara $existingVersion kurulumu bulundu. $NewVersion surumune geri alinacak."
                 ExistingVersion = $existingVersion
             }
         }
@@ -121,7 +121,7 @@ function Get-InstallMode {
     return @{
         Mode = "repair"
         Label = "Reinstall"
-        Details = "PyLua $existingVersion zaten kurulu. Bu kurulum ayni surumu yeniden kuracak."
+        Details = "Lunara $existingVersion zaten kurulu. Bu kurulum ayni surumu yeniden kuracak."
         ExistingVersion = $existingVersion
     }
 }
@@ -151,7 +151,7 @@ function Ensure-PathSetting {
     [Environment]::SetEnvironmentVariable("Path", ($entries -join ';'), "User")
 }
 
-function Write-PyLuaIcon {
+function Write-LunaraIcon {
     param([string]$Path)
 
     Add-Type -AssemblyName System.Drawing
@@ -199,11 +199,11 @@ function Show-InstallerWizard {
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Drawing
 
-    $tempIconPath = Join-Path ([System.IO.Path]::GetTempPath()) ("pylua-installer-" + [guid]::NewGuid().ToString("N") + ".ico")
-    Write-PyLuaIcon $tempIconPath
+    $tempIconPath = Join-Path ([System.IO.Path]::GetTempPath()) ("lunara-installer-" + [guid]::NewGuid().ToString("N") + ".ico")
+    Write-LunaraIcon $tempIconPath
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "PyLua Setup"
+    $form.Text = "Lunara Setup"
     $form.StartPosition = "CenterScreen"
     $form.FormBorderStyle = "FixedDialog"
     $form.MaximizeBox = $false
@@ -219,7 +219,7 @@ function Show-InstallerWizard {
     $form.Controls.Add($sidebar)
 
     $brandTitle = New-Object System.Windows.Forms.Label
-    $brandTitle.Text = "PyLua"
+    $brandTitle.Text = "Lunara"
     $brandTitle.ForeColor = [System.Drawing.Color]::White
     $brandTitle.Font = New-Object System.Drawing.Font "Segoe UI", 22, ([System.Drawing.FontStyle]::Bold)
     $brandTitle.Location = New-Object System.Drawing.Point 28, 36
@@ -275,21 +275,21 @@ function Show-InstallerWizard {
     $content.Controls.Add($welcomePanel)
 
     $welcomeTitle = New-Object System.Windows.Forms.Label
-    $welcomeTitle.Text = "Welcome to PyLua Setup"
+    $welcomeTitle.Text = "Welcome to Lunara Setup"
     $welcomeTitle.Font = New-Object System.Drawing.Font "Segoe UI", 18, ([System.Drawing.FontStyle]::Bold)
     $welcomeTitle.Location = New-Object System.Drawing.Point 28, 30
     $welcomeTitle.AutoSize = $true
     $welcomePanel.Controls.Add($welcomeTitle)
 
     $welcomeBody = New-Object System.Windows.Forms.Label
-    $welcomeBody.Text = "This wizard will install PyLua " + $Version + " on your computer."
+    $welcomeBody.Text = "This wizard will install Lunara " + $Version + " on your computer."
     $welcomeBody.Font = New-Object System.Drawing.Font "Segoe UI", 10
     $welcomeBody.Location = New-Object System.Drawing.Point 30, 82
     $welcomeBody.Size = New-Object System.Drawing.Size 460, 40
     $welcomePanel.Controls.Add($welcomeBody)
 
     $welcomeDetails = New-Object System.Windows.Forms.Label
-    $welcomeDetails.Text = "You can choose the installation folder, review the license, and decide whether PyLua should be added to PATH."
+    $welcomeDetails.Text = "You can choose the installation folder, review the license, and decide whether Lunara should be added to PATH."
     $welcomeDetails.Font = New-Object System.Drawing.Font "Segoe UI", 10
     $welcomeDetails.Location = New-Object System.Drawing.Point 30, 126
     $welcomeDetails.Size = New-Object System.Drawing.Size 470, 60
@@ -360,7 +360,7 @@ function Show-InstallerWizard {
     $optionsPanel.Controls.Add($browseButton)
 
     $pathCheck = New-Object System.Windows.Forms.CheckBox
-    $pathCheck.Text = "Add PyLua bin folder to PATH"
+    $pathCheck.Text = "Add Lunara bin folder to PATH"
     $pathCheck.Location = New-Object System.Drawing.Point 30, 164
     $pathCheck.Checked = $true
     $pathCheck.AutoSize = $true
@@ -380,7 +380,7 @@ function Show-InstallerWizard {
     $optionsPanel.Controls.Add($summaryLabel)
 
     $folderDialog = New-Object System.Windows.Forms.FolderBrowserDialog
-    $folderDialog.Description = "Choose where PyLua should be installed"
+    $folderDialog.Description = "Choose where Lunara should be installed"
 
     function Update-InstallStatus {
         $target = $folderText.Text.Trim()
@@ -439,7 +439,7 @@ function Show-InstallerWizard {
 
     $nextButton.Add_Click({
         if ($script:CurrentStep -eq 1 -and -not $acceptCheck.Checked) {
-            [System.Windows.Forms.MessageBox]::Show("You need to accept the license terms to continue.", "PyLua Setup",
+            [System.Windows.Forms.MessageBox]::Show("You need to accept the license terms to continue.", "Lunara Setup",
                 [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning) | Out-Null
             return
         }
@@ -447,7 +447,7 @@ function Show-InstallerWizard {
         if ($script:CurrentStep -eq 2) {
             $target = $folderText.Text.Trim()
             if ([string]::IsNullOrWhiteSpace($target)) {
-                [System.Windows.Forms.MessageBox]::Show("Choose an installation folder.", "PyLua Setup",
+                [System.Windows.Forms.MessageBox]::Show("Choose an installation folder.", "Lunara Setup",
                     [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning) | Out-Null
                 return
             }
@@ -491,7 +491,7 @@ function Invoke-Install {
 
     $installDir = [System.IO.Path]::GetFullPath($TargetDir)
     $binDir = Join-Path $installDir "bin"
-    $startMenuDir = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\PyLua"
+    $startMenuDir = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Lunara"
     $payloadZip = Get-SourceFile "payload.zip"
 
     if (-not (Test-Path $payloadZip)) {
@@ -500,7 +500,7 @@ function Invoke-Install {
 
     $installState = Get-InstallMode -TargetDir $installDir -NewVersion $Version
 
-    Write-Step "Installing PyLua to $installDir"
+    Write-Step "Installing Lunara to $installDir"
     New-Item -ItemType Directory -Force -Path $installDir | Out-Null
 
     foreach ($oldItem in @("bin", "docs", "examples", "include", "lib", "python", "website")) {
@@ -510,7 +510,7 @@ function Invoke-Install {
         }
     }
 
-    $expandRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("pylua-payload-" + [guid]::NewGuid().ToString("N"))
+    $expandRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("lunara-payload-" + [guid]::NewGuid().ToString("N"))
     New-Item -ItemType Directory -Force -Path $expandRoot | Out-Null
     try {
         Expand-Archive -Path $payloadZip -DestinationPath $expandRoot -Force
@@ -531,10 +531,10 @@ function Invoke-Install {
     Copy-Item -Path (Get-SourceFile "uninstall.ps1") -Destination (Join-Path $installDir "uninstall.ps1") -Force
     Copy-Item -Path (Get-SourceFile "uninstall.cmd") -Destination (Join-Path $installDir "uninstall.cmd") -Force
 
-    $iconPath = Join-Path $installDir "PyLua.ico"
-    Write-PyLuaIcon $iconPath
+    $iconPath = Join-Path $installDir "Lunara.ico"
+    Write-LunaraIcon $iconPath
 
-    [Environment]::SetEnvironmentVariable("PYLUA_HOME", $installDir, "User")
+    [Environment]::SetEnvironmentVariable("LUNARA_HOME", $installDir, "User")
     Ensure-PathSetting -BinDir $binDir -Enabled $AddToPath
     if ($AddToPath) {
         Write-Step "Added $binDir to user PATH"
@@ -543,26 +543,26 @@ function Invoke-Install {
     New-Item -ItemType Directory -Force -Path $startMenuDir | Out-Null
     $shell = New-Object -ComObject WScript.Shell
 
-    $guideShortcut = $shell.CreateShortcut((Join-Path $startMenuDir "PyLua Guide.lnk"))
-    $guideShortcut.TargetPath = Join-Path $installDir "docs\PYLUA_GUIDE.md"
+    $guideShortcut = $shell.CreateShortcut((Join-Path $startMenuDir "Lunara Guide.lnk"))
+    $guideShortcut.TargetPath = Join-Path $installDir "docs\LUNARA_GUIDE.md"
     $guideShortcut.IconLocation = $iconPath
     $guideShortcut.Save()
 
-    $cmdShortcut = $shell.CreateShortcut((Join-Path $startMenuDir "PyLua CLI.lnk"))
+    $cmdShortcut = $shell.CreateShortcut((Join-Path $startMenuDir "Lunara CLI.lnk"))
     $cmdShortcut.TargetPath = $env:ComSpec
-    $cmdShortcut.Arguments = "/k set ""PYLUA_HOME=$installDir"" && set ""PATH=$binDir;%PATH%"""
+    $cmdShortcut.Arguments = "/k set ""LUNARA_HOME=$installDir"" && set ""PATH=$binDir;%PATH%"""
     $cmdShortcut.WorkingDirectory = $installDir
     $cmdShortcut.IconLocation = $iconPath
     $cmdShortcut.Save()
 
-    $uninstallShortcut = $shell.CreateShortcut((Join-Path $startMenuDir ("Uninstall PyLua " + $Version + ".lnk")))
+    $uninstallShortcut = $shell.CreateShortcut((Join-Path $startMenuDir ("Uninstall Lunara " + $Version + ".lnk")))
     $uninstallShortcut.TargetPath = Join-Path $installDir "uninstall.cmd"
     $uninstallShortcut.WorkingDirectory = $installDir
     $uninstallShortcut.IconLocation = $iconPath
     $uninstallShortcut.Save()
 
     $manifest = @{
-        app = "PyLua"
+        app = "Lunara"
         version = $Version
         install_dir = $installDir
         add_to_path = $AddToPath
@@ -572,9 +572,9 @@ function Invoke-Install {
     } | ConvertTo-Json
     Set-Content -Path (Get-ManifestPath $installDir) -Value $manifest -Encoding UTF8
 
-    & (Join-Path $binDir "pylua.exe") version | Out-Null
+    & (Join-Path $binDir "lunara.exe") version | Out-Null
 
-    Write-Step "PyLua installation complete."
+    Write-Step "Lunara installation complete."
     Write-Step "You may need to open a new terminal for PATH changes to apply."
 
     return $installState
@@ -605,9 +605,10 @@ $result = Invoke-Install -TargetDir $selection.InstallDir -Version $version -Add
 if (-not $Quiet) {
     Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.MessageBox]::Show(
-        "PyLua $version installed successfully.`r`nMode: $($result.Label)`r`nFolder: $($selection.InstallDir)",
-        "PyLua Setup",
+        "Lunara $version installed successfully.`r`nMode: $($result.Label)`r`nFolder: $($selection.InstallDir)",
+        "Lunara Setup",
         [System.Windows.Forms.MessageBoxButtons]::OK,
         [System.Windows.Forms.MessageBoxIcon]::Information
     ) | Out-Null
 }
+

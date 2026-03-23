@@ -1,11 +1,11 @@
-import fs
+﻿import fs
 import json
 import time
 
 let catalog = {
     generated_at: time.utc(),
     site: {
-        name: "PyLua Roastery",
+        name: "Lunara Roastery",
         city: "Istanbul"
     },
     products: [
@@ -35,3 +35,4 @@ end
 
 json.write("build/out/catalog.json", catalog)
 print(json.encode(catalog))
+

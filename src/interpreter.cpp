@@ -1,4 +1,4 @@
-#include "pylua/interpreter.hpp"
+﻿#include "lunara/interpreter.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -31,10 +31,10 @@
 #include <unistd.h>
 #endif
 
-#include "pylua/lexer.hpp"
-#include "pylua/parser.hpp"
+#include "lunara/lexer.hpp"
+#include "lunara/parser.hpp"
 
-namespace pylua::runtime {
+namespace lunara::runtime {
 
 Value::Value() : data_(std::monostate{}) {}
 Value::Value(double number) : data_(number) {}
@@ -165,9 +165,9 @@ std::map<std::string, Value> Environment::exported_values() const {
     return exported;
 }
 
-}  // namespace pylua::runtime
+}  // namespace lunara::runtime
 
-namespace pylua {
+namespace lunara {
 
 namespace {
 
@@ -735,7 +735,7 @@ void serve_static_directory(const std::filesystem::path& root_dir, int port) {
         throw RuntimeError("listen failed: " + socket_error_string());
     }
 
-    std::cout << "PyLua web server listening on http://127.0.0.1:" << port << '\n';
+    std::cout << "Lunara web server listening on http://127.0.0.1:" << port << '\n';
     std::cout << "Serving " << root.string() << '\n';
 
     while (true) {
@@ -863,7 +863,7 @@ void serve_router_app(Interpreter& interpreter, std::shared_ptr<RouterState> rou
         throw RuntimeError("listen failed: " + socket_error_string());
     }
 
-    std::cout << "PyLua router listening on http://127.0.0.1:" << port << '\n';
+    std::cout << "Lunara router listening on http://127.0.0.1:" << port << '\n';
 
     while (true) {
         sockaddr_in client_address{};
@@ -1310,7 +1310,7 @@ runtime::Value Interpreter::load_module(const std::string& module_name) {
 std::filesystem::path Interpreter::resolve_module_path(const std::string& module_name) const {
     std::string relative_module = module_name;
     std::replace(relative_module.begin(), relative_module.end(), '.', '/');
-    const std::filesystem::path relative_path = std::filesystem::path(relative_module).replace_extension(".pylua");
+    const std::filesystem::path relative_path = std::filesystem::path(relative_module).replace_extension(".lunara");
 
     std::vector<std::filesystem::path> bases;
     if (!script_stack_.empty()) bases.push_back(script_stack_.back().parent_path());
@@ -1534,4 +1534,5 @@ Value UserFunction::call(Interpreter& interpreter, const std::vector<Value>& arg
     return Value();
 }
 
-}  // namespace pylua
+}  // namespace lunara
+

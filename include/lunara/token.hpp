@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 
-namespace pylua {
+namespace lunara {
 
 enum class TokenType {
     LeftParen,
@@ -60,4 +60,5 @@ struct Token {
 
 std::string token_type_name(TokenType type);
 
-}  // namespace pylua
+}  // namespace lunara
+

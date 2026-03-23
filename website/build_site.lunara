@@ -1,4 +1,4 @@
-import fs
+﻿import fs
 import json
 import time
 import lib.site_content
@@ -13,7 +13,7 @@ let html = "<!DOCTYPE html>\n" +
 "  <meta charset=\"UTF-8\" />\n" +
 "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n" +
 "  <title>North Ember</title>\n" +
-"  <meta name=\"description\" content=\"North Ember is a cinematic coffee room built with PyLua.\" />\n" +
+"  <meta name=\"description\" content=\"North Ember is a cinematic coffee room built with Lunara.\" />\n" +
 "  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n" +
 "  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />\n" +
 "  <link href=\"https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap\" rel=\"stylesheet\" />\n" +
@@ -70,7 +70,7 @@ let html = "<!DOCTYPE html>\n" +
 "          <div class=\"detail-row\"><span>Open</span><strong id=\"hours\"></strong></div>\n" +
 "          <div class=\"detail-row\"><span>Address</span><strong id=\"address\"></strong></div>\n" +
 "          <div class=\"detail-row\"><span>Phone</span><strong id=\"phone\"></strong></div>\n" +
-"          <div class=\"stamp\">Built with PyLua / <span id=\"generated-at\"></span></div>\n" +
+"          <div class=\"stamp\">Built with Lunara / <span id=\"generated-at\"></span></div>\n" +
 "        </aside>\n" +
 "      </section>\n" +
 "\n" +
@@ -298,3 +298,4 @@ fs.write_text("website/dist/app.js", app)
 json.write("website/dist/site_data.json", site_content.site_data)
 
 print("website built at website/dist")
+

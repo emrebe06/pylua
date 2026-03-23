@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <map>
 #include <memory>
@@ -8,11 +8,11 @@
 #include <variant>
 #include <vector>
 
-namespace pylua {
+namespace lunara {
 class Interpreter;
 }
 
-namespace pylua::runtime {
+namespace lunara::runtime {
 
 class RuntimeError : public std::runtime_error {
   public:
@@ -99,4 +99,5 @@ class Environment : public std::enable_shared_from_this<Environment> {
     std::shared_ptr<Environment> enclosing_;
 };
 
-}  // namespace pylua::runtime
+}  // namespace lunara::runtime
+

@@ -1,4 +1,4 @@
-import web
+﻿import web
 import time
 import security
 import compute
@@ -29,7 +29,7 @@ end
 func info(ctx)
     let caps = compute.capabilities()
     return web.json({
-        message: "PyLua router",
+        message: "Lunara router",
         path: ctx.request.path,
         backend: caps.preferred_backend,
         cpu_threads: caps.cpu_threads
@@ -40,3 +40,4 @@ app.use(auth)
 app.get("/health", health)
 app.get("/info", info)
 app.listen(8092)
+

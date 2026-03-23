@@ -1,8 +1,8 @@
-# PyLua Guide
+﻿# Lunara Guide
 
-Yazar: Emre Demirbaş
+Yazar: Emre DemirbaÅŸ
 
-PyLua, `.pylua` dosyalarini dogrudan calistiran native bir scripting dili ve runtime motorudur. Bu repo icindeki surum; veri uretme, JSON pipeline, yerel web backend, statik site build etme ve Python icinden embed edilme senaryolari icin tasarlanmistir.
+Lunara, `.lunara` dosyalarini dogrudan calistiran native bir scripting dili ve runtime motorudur. Bu repo icindeki surum; veri uretme, JSON pipeline, yerel web backend, statik site build etme ve Python icinden embed edilme senaryolari icin tasarlanmistir.
 
 Bu guide sana su 6 seyi verir:
 
@@ -16,7 +16,7 @@ Bu guide sana su 6 seyi verir:
 ## 1. Hizli Baslangic
 
 ```powershell
-cd C:\pylua
+cd C:\lunara
 cmake -S . -B build
 cmake --build build --config Debug
 ```
@@ -24,21 +24,21 @@ cmake --build build --config Debug
 Temel kullanim:
 
 ```powershell
-.\build\Debug\pylua.exe help
-.\build\Debug\pylua.exe .\examples\hello.pylua
-.\build\Debug\pylua.exe run .\examples\hello.pylua
-.\build\Debug\pylua.exe vm .\examples\vm_demo.pylua
-.\build\Debug\pylua.exe check .\examples\hello.pylua
+.\build\Debug\lunara.exe help
+.\build\Debug\lunara.exe .\examples\hello.lunara
+.\build\Debug\lunara.exe run .\examples\hello.lunara
+.\build\Debug\lunara.exe vm .\examples\vm_demo.lunara
+.\build\Debug\lunara.exe check .\examples\hello.lunara
 ```
 
 ## 2. CLI Komutlari
 
-- `pylua <script.pylua>`: varsayilan interpreter backend ile calistirir
-- `pylua run <script.pylua>`: interpreter backend
-- `pylua vm <script.pylua>`: VM backend
-- `pylua check <script.pylua>`: parse kontrolu yapar
-- `pylua help`: yardim basar
-- `pylua version`: surum basar
+- `lunara <script.lunara>`: varsayilan interpreter backend ile calistirir
+- `lunara run <script.lunara>`: interpreter backend
+- `lunara vm <script.lunara>`: VM backend
+- `lunara check <script.lunara>`: parse kontrolu yapar
+- `lunara help`: yardim basar
+- `lunara version`: surum basar
 
 Not:
 
@@ -48,49 +48,49 @@ Not:
 
 ## 3. Windows Kurulum Exe
 
-PyLua icin Windows setup exe uretmek icin:
+Lunara icin Windows setup exe uretmek icin:
 
 ```powershell
-cd C:\pylua
+cd C:\lunara
 powershell -ExecutionPolicy Bypass -File .\packaging\windows\create_installer.ps1
 ```
 
 Uretilen dosya:
 
-`C:\pylua\dist\windows\PyLua-Setup-0.1.0.exe`
+`C:\lunara\dist\windows\Lunara-Setup-0.1.0.exe`
 
 Bu paket:
 
 - Release build uretir
 - self-contained MSVC runtime ile gelir
-- `%LOCALAPPDATA%\Programs\PyLua` altina kurulur
+- `%LOCALAPPDATA%\Programs\Lunara` altina kurulur
 - wizard ile lisans ekrani gosterir
 - kurulum klasoru secme sayfasi sunar
 - `Add to PATH` checkbox'i sunar
 - mevcut kurulumu algilayip install/upgrade/repair davranisi uygular
 - `bin` klasorunu user PATH'e ekler
-- `PYLUA_HOME` ortam degiskenini yazar
+- `LUNARA_HOME` ortam degiskenini yazar
 
 ## 4. Proje Yapisi
 
-Tipik bir PyLua klasoru:
+Tipik bir Lunara klasoru:
 
 ```text
 my_app/
   lib/
-    helpers.pylua
-  app.pylua
+    helpers.lunara
+  app.lunara
   data/
     payload.json
 ```
 
 Modul import:
 
-```pylua
+```lunara
 import lib.helpers
 ```
 
-PyLua su yollar uzerinden modul arar:
+Lunara su yollar uzerinden modul arar:
 
 - script klasoru altinda goreli dosya
 - script klasoru altinda `lib/`
@@ -101,7 +101,7 @@ PyLua su yollar uzerinden modul arar:
 
 ### Degisken
 
-```pylua
+```lunara
 let name = "North Ember"
 let price = 120
 const city = "Istanbul"
@@ -109,7 +109,7 @@ const city = "Istanbul"
 
 ### Fonksiyon
 
-```pylua
+```lunara
 func greet(name)
     return "Merhaba " + name
 end
@@ -117,7 +117,7 @@ end
 
 ### Kosul
 
-```pylua
+```lunara
 if price > 100 then
     print("premium")
 elseif price > 50 then
@@ -129,7 +129,7 @@ end
 
 ### While
 
-```pylua
+```lunara
 let i = 0
 
 while i < 3 do
@@ -140,7 +140,7 @@ end
 
 ### For In
 
-```pylua
+```lunara
 let items = ["Latte", "Mocha", "Filter"]
 
 for item in items do
@@ -164,14 +164,14 @@ Bugun kullanabildigin ana tipler:
 
 ### List
 
-```pylua
+```lunara
 let drinks = ["Latte", "Mocha", "Espresso"]
 print(drinks[0])
 ```
 
 ### Object
 
-```pylua
+```lunara
 let cafe = {
     name: "North Ember",
     city: "Istanbul",
@@ -209,7 +209,7 @@ Desteklenen operatorler:
 
 `json.decode` ve `json.read` artik dogrudan mevcut.
 
-```pylua
+```lunara
 import json
 
 let raw = "{\"name\":\"North Ember\",\"open\":true}"
@@ -232,7 +232,7 @@ Python uyumlu alias'ler de var:
 
 ### `fs`
 
-```pylua
+```lunara
 import fs
 
 if not fs.exists("build/out") then
@@ -265,7 +265,7 @@ Fonksiyonlar:
 
 ### `time`
 
-```pylua
+```lunara
 import time
 
 print(time.now())
@@ -284,7 +284,7 @@ Fonksiyonlar:
 
 Ornek:
 
-```pylua
+```lunara
 import security
 
 let token = security.issue_token(24)
@@ -303,7 +303,7 @@ Fonksiyonlar:
 
 Ornek:
 
-```pylua
+```lunara
 import compute
 
 let caps = compute.capabilities()
@@ -340,11 +340,11 @@ Fonksiyonlar:
 
 ## 10. Web Runtime
 
-PyLua artik sadece statik dosya sunmakla kalmiyor. Mini bir web runtime da var.
+Lunara artik sadece statik dosya sunmakla kalmiyor. Mini bir web runtime da var.
 
 ### Statik Sunum
 
-```pylua
+```lunara
 import web
 
 web.serve_static("website/dist", 8080)
@@ -354,7 +354,7 @@ web.serve_static("website/dist", 8080)
 
 `web.response`, `web.text`, `web.json` ile response uretebilirsin.
 
-```pylua
+```lunara
 import web
 
 func hello(ctx)
@@ -362,7 +362,7 @@ func hello(ctx)
 end
 ```
 
-```pylua
+```lunara
 import web
 
 func hello(ctx)
@@ -372,7 +372,7 @@ end
 
 ### Router
 
-```pylua
+```lunara
 import web
 import time
 
@@ -413,7 +413,7 @@ Middleware bir callable alir ve `ctx` uzerinden calisir.
 
 Ornek:
 
-```pylua
+```lunara
 import web
 import security
 
@@ -443,41 +443,41 @@ app.listen(8092)
 
 ## 11. Python Embed
 
-PyLua iki yolla Python tarafina baglanabilir:
+Lunara iki yolla Python tarafina baglanabilir:
 
 ### Subprocess Bridge
 
-[pylua_bridge.py](/C:/pylua/python/pylua_bridge.py)
+[lunara_bridge.py](/C:/lunara/python/lunara_bridge.py)
 
 ### Native DLL + `ctypes`
 
-[pylua_embed_ctypes.py](/C:/pylua/python/pylua_embed_ctypes.py)
+[lunara_embed_ctypes.py](/C:/lunara/python/lunara_embed_ctypes.py)
 
 Ornek:
 
 ```python
 from pathlib import Path
-from pylua_embed_ctypes import PyLuaEmbed
+from lunara_embed_ctypes import LunaraEmbed
 
-root = Path(r"C:\pylua")
-embed = PyLuaEmbed(root / "build" / "Debug" / "pylua_embed.dll")
+root = Path(r"C:\lunara")
+embed = LunaraEmbed(root / "build" / "Debug" / "lunara_embed.dll")
 
-print(embed.run_file(root / "examples" / "vm_demo.pylua", backend="vm"))
+print(embed.run_file(root / "examples" / "vm_demo.lunara", backend="vm"))
 print(embed.run_source('print("embed ok")'))
 ```
 
-Bu yol FastAPI, Flask ya da queue-worker tarafindan PyLua scripti cagirabilsin diye var.
+Bu yol FastAPI, Flask ya da queue-worker tarafindan Lunara scripti cagirabilsin diye var.
 
 ## 12. Ornekler
 
 Hazir ornekler:
 
-- [hello.pylua](/C:/pylua/examples/hello.pylua)
-- [vm_demo.pylua](/C:/pylua/examples/vm_demo.pylua)
-- [vm_data_demo.pylua](/C:/pylua/examples/vm_data_demo.pylua)
-- [router_demo.pylua](/C:/pylua/examples/router_demo.pylua)
-- [platform_demo.pylua](/C:/pylua/examples/platform_demo.pylua)
-- [catalog.pylua](/C:/pylua/examples/catalog.pylua)
+- [hello.lunara](/C:/lunara/examples/hello.lunara)
+- [vm_demo.lunara](/C:/lunara/examples/vm_demo.lunara)
+- [vm_data_demo.lunara](/C:/lunara/examples/vm_data_demo.lunara)
+- [router_demo.lunara](/C:/lunara/examples/router_demo.lunara)
+- [platform_demo.lunara](/C:/lunara/examples/platform_demo.lunara)
+- [catalog.lunara](/C:/lunara/examples/catalog.lunara)
 
 ## 13. Guvenlik Katmani Bugun Ne Sagliyor
 
@@ -525,6 +525,7 @@ Bence en dogru sonraki adimlar:
 
 ## 16. Kisa Tarif
 
-Bugunku haliyle PyLua'yi en dogru su cumle anlatir:
+Bugunku haliyle Lunara'yi en dogru su cumle anlatir:
 
-`PyLua is a data-first native scripting language with an early web runtime, VM compatibility path, and Python embedding support.`
+`Lunara is a data-first native scripting language with an early web runtime, VM compatibility path, and Python embedding support.`
+

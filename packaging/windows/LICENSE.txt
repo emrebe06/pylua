@@ -1,8 +1,8 @@
-PyLua Preview License
+﻿Lunara Preview License
 
-Copyright (c) Emre Demirbaş
+Copyright (c) Emre DemirbaÅŸ
 
-This preview build of PyLua is provided for evaluation, development, testing,
+This preview build of Lunara is provided for evaluation, development, testing,
 and educational use.
 
 You may:
@@ -19,4 +19,5 @@ guarantee of fitness, reliability, or security for production use.
 
 This preview license is intended as an installer-facing evaluation notice.
 You can replace it later with MIT, Apache-2.0, GPL, or a commercial license
-when PyLua reaches a formal release process.
+when Lunara reaches a formal release process.
+

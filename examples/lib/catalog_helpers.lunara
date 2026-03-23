@@ -1,5 +1,5 @@
-let site_defaults = {
-    name: "PyLua Roastery",
+﻿let site_defaults = {
+    name: "Lunara Roastery",
     city: "Istanbul",
     currency: "TRY"
 }
@@ -11,3 +11,4 @@ func total_price(products)
     end
     return total
 end
+
