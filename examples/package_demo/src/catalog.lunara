@@ -1,0 +1,8 @@
+let package_name = "shopkit"
+
+func featured_products()
+    return [
+        {id: 1, name: "Lunara Sepeti", price: 320},
+        {id: 2, name: "SQLUna Starter", price: 540}
+    ]
+end

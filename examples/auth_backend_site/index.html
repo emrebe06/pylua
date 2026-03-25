@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lunara Auth Backend</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #f5f0e4 0%, #d6c8b1 100%);
+      color: #1c241c;
+      font-family: Georgia, "Times New Roman", serif;
+      display: grid;
+      place-items: center;
+    }
+
+    main {
+      width: min(760px, calc(100% - 32px));
+      padding: 28px;
+      border-radius: 24px;
+      background: rgba(255, 249, 237, 0.88);
+      box-shadow: 0 24px 70px rgba(25, 21, 18, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: #1c241c;
+      color: #fff8ef;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    pre {
+      margin: 0;
+      padding: 16px;
+      border-radius: 16px;
+      background: #1b231d;
+      color: #f5f0e4;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p>SQLUna auth store</p>
+    <h1>Lunara login/register/protected route akisi.</h1>
+    <div class="actions">
+      <button id="register-btn">Register</button>
+      <button id="login-btn">Login</button>
+      <button id="me-btn">Me</button>
+      <button id="protected-btn">Protected</button>
+      <button id="logout-btn">Logout</button>
+    </div>
+    <pre id="output">ready</pre>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>

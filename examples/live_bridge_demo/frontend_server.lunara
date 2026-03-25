@@ -1,0 +1,3 @@
+import web
+
+web.serve_static("examples/live_bridge_demo/site", 8081)

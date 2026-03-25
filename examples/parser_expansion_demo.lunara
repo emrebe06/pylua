@@ -1,0 +1,37 @@
+import json
+
+func pick_status(items)
+    let picked = "none"
+    for item in items do
+        if item == "draft" then
+            continue
+        end
+        picked = item
+        break
+    end
+    return picked
+end
+
+let doubler = func(value)
+    return value * 2
+end
+
+let sum_until = func(items)
+    let total = 0
+    for item in items do
+        if item == 2 then
+            continue
+        end
+        if item > 4 then
+            break
+        end
+        total = total + item
+    end
+    return total
+end
+
+print(json.encode({
+    status: pick_status(["draft", "beta", "stable"]),
+    doubled: doubler(21),
+    total: sum_until([1, 2, 3, 4, 5, 6])
+}))

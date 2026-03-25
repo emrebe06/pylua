@@ -11,7 +11,7 @@ namespace lunara {
 
 class Parser {
   public:
-    explicit Parser(std::vector<Token> tokens);
+    explicit Parser(std::vector<Token> tokens, std::string source = {});
 
     ast::Program parse();
 
@@ -25,8 +25,20 @@ class Parser {
     ast::StmtPtr if_statement();
     ast::StmtPtr while_statement();
     ast::StmtPtr return_statement();
+    ast::StmtPtr defer_statement();
+    ast::StmtPtr throw_statement();
+    ast::StmtPtr try_statement();
+    ast::StmtPtr match_statement();
+    ast::StmtPtr break_statement();
+    ast::StmtPtr continue_statement();
     ast::StmtPtr expression_statement();
     std::vector<ast::StmtPtr> block_until(const std::vector<TokenType>& terminators);
+    ast::TypeHint optional_type_hint();
+    ast::TypeExpression parse_type_expression();
+    std::string type_expression_to_string(const ast::TypeExpression& expression) const;
+    std::vector<ast::FunctionParam> parameter_list();
+    ast::MatchPattern parse_match_pattern();
+    std::string code_frame_for_token(const Token& token) const;
 
     ast::ExprPtr expression();
     ast::ExprPtr assignment();
@@ -38,6 +50,7 @@ class Parser {
     ast::ExprPtr factor();
     ast::ExprPtr unary();
     ast::ExprPtr call();
+    ast::ExprPtr lambda_expression();
     ast::ExprPtr primary();
 
     bool is_at_end() const;
@@ -49,9 +62,12 @@ class Parser {
     const Token& consume(TokenType type, const std::string& message);
     [[noreturn]] void error(const Token& token, const std::string& message) const;
     bool is_block_terminator(const std::vector<TokenType>& terminators) const;
+    void synchronize();
 
     std::vector<Token> tokens_;
+    std::string source_;
     std::size_t current_ = 0;
+    mutable std::vector<std::string> errors_;
 };
 
 }  // namespace lunara

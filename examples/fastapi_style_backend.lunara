@@ -1,0 +1,117 @@
+import web
+import sqluna
+import payments
+import time
+
+let app = web.api()
+let db = sqluna.sqlite("build/fastapi_demo/app.db")
+
+let note_table = sqluna.table("notes", [
+    sqluna.column("id", "integer", {primary_key: true, auto_increment: true, not_null: true}),
+    sqluna.column("title", "text", {not_null: true}),
+    sqluna.column("created_at", "text", {not_null: true})
+])
+
+db.migrate(note_table)
+
+let gateway = payments.contract("mock_gateway", {
+    create_checkout: func(amount)
+        return {
+            provider: "mock_gateway",
+            checkout_id: "chk-fastapi",
+            amount: amount,
+            status: "created"
+        }
+    end,
+    refund: func(reference)
+        return {
+            provider: "mock_gateway",
+            reference: reference,
+            status: "refunded"
+        }
+    end,
+    webhook: func(payload)
+        return {
+            provider: "mock_gateway",
+            accepted: true,
+            payload: payload
+        }
+    end
+})
+
+func pick_mode()
+    let mode = "cold"
+    for item in ["boot", "skip", "hot"] do
+        if item == "skip" then
+            continue
+        end
+        mode = item
+        if item == "hot" then
+            break
+        end
+    end
+    return mode
+end
+
+func require_note_payload(ctx)
+    let guard = web.require_json(["title"])
+    return guard(ctx)
+end
+
+app.get("/", func(ctx)
+    return web.render("examples/fastapi_style_site/index.html", {
+        service: "Lunara API",
+        mode: pick_mode(),
+        now: time.utc()
+    }, 200)
+end)
+
+app.get("/health", func(ctx)
+    return web.json({
+        ok: true,
+        framework: "fastapi-style",
+        mode: pick_mode(),
+        count: db.count("notes", {}),
+        now: time.utc()
+    }, 200)
+end)
+
+app.post("/notes", func(ctx)
+    let guard = require_note_payload(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    let payload = ctx.request.json
+    let note_id = db.insert("notes", {
+        title: payload.title,
+        created_at: time.utc()
+    })
+    return web.json({
+        ok: true,
+        note: db.first("notes", ["id", "title", "created_at"], {id: note_id})
+    }, 201)
+end)
+
+app.get("/notes", func(ctx)
+    return web.json({
+        ok: true,
+        items: db.select("notes", ["id", "title", "created_at"], {}, 50)
+    }, 200)
+end)
+
+app.post("/checkout", func(ctx)
+    return web.json({
+        ok: true,
+        checkout: gateway.create_checkout(1499.9)
+    }, 200)
+end)
+
+app.post("/webhooks/payment", func(ctx)
+    return web.json({
+        ok: true,
+        result: gateway.webhook(ctx.request.json)
+    }, 200)
+end)
+
+app.listen(8110)

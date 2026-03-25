@@ -1,0 +1,27 @@
+import web
+import time
+
+let socket_app = web.websocket_server()
+
+func on_open(client)
+    client.send_text("{\"kind\":\"welcome\",\"message\":\"Lunara websocket ready\",\"path\":\"" + client.path + "\"}")
+    return nil
+end
+
+func on_message(client, message)
+    return {
+        kind: "echo",
+        message: message,
+        at: time.utc()
+    }
+end
+
+func on_close(client)
+    print("websocket closed " + client.path)
+    return nil
+end
+
+socket_app.on_open(on_open)
+socket_app.on_message(on_message)
+socket_app.on_close(on_close)
+socket_app.listen(8094)

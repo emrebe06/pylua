@@ -1,0 +1,16 @@
+import dsp
+import json
+
+let wave = dsp.sine_wave(16, 440, 8000)
+let harmonic = dsp.sine_wave(16, 880, 8000)
+let mixed = dsp.mix(wave, harmonic)
+let normalized = dsp.normalize(wave)
+let smoothed = dsp.moving_average(normalized, 4)
+
+print(json.encode({
+    rms: dsp.rms(normalized),
+    peak: dsp.peak(mixed),
+    convolved: dsp.convolve([1, 2, 3], [0.25, 0.5, 0.25]),
+    preview: smoothed,
+    mixed_preview: mixed
+}))

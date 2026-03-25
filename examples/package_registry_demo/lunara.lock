@@ -1,0 +1,4 @@
+[[package]]
+name = "mailers"
+version = "1.0.0"
+registry = ".lunara/registry"

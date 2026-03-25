@@ -1,0 +1,52 @@
+import json as j
+
+func summarize_cart(cart)
+    let total = 0
+    for index, item in cart do
+        if item.skip == true then
+            continue
+        end
+        total = total + item.price
+        if index > 3 then
+            break
+        end
+    end
+    return total
+end
+
+let inventory = {
+    domates: 12,
+    biber: 8,
+    limon: 3
+}
+
+let message = ""
+
+try
+    assert(len(keys(inventory)) == 3, "inventory key count mismatch")
+    throw {
+        kind: "stock_warning",
+        note: "limon azaldi"
+    }
+catch err
+    message = err.kind + ":" + err.note
+finally
+    message = message + ":logged"
+end
+
+let remainder = 17 % 5
+let total = summarize_cart([
+    {price: 10, skip: false},
+    {price: 20, skip: false},
+    {price: 30, skip: true},
+    {price: 40, skip: false},
+    {price: 50, skip: false}
+])
+
+print(j.encode({
+    total: total,
+    remainder: remainder,
+    message: message,
+    inventory_type: type(inventory),
+    inventory_values: values(inventory)
+}))

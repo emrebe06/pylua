@@ -1,10 +1,10 @@
 # Lunara Next Steps
 
-Bu dosya GitHub vitrini icin degil, gelistirme yonu ve bir sonraki adimlari netlestirmek icin tutulur.
+Bu dosya GitHub vitrini icin degil, gelistirme yonu ve sonraki adimlari net tutmak icin tutulur.
 
-Yazar: Emre Demirbaş
+Yazar: Emre Demirbas
 
-Tarih: 23 Mart 2026
+Tarih: 25 Mart 2026
 
 ## Durum
 
@@ -16,20 +16,22 @@ Bugun itibariyla Lunara:
 - Python embed destegi sunuyor
 - Windows installer uretebiliyor
 - `.lunara` uzantisini kullaniyor
-- temel web runtime, router ve middleware akisina sahip
+- gelisen web runtime, router, middleware ve websocket akisina sahip
+- SQLUna tabanli auth/store ve backend ornekleri tasiyor
+- script seviyesi SQLite query ve migration yardimcilari sunuyor
+- ilk `dsp` stdlib genislemesini almis durumda
 
-Ama henuz erken asama bir dil/runtime projesidir.
+Ama halen buyume asamasinda bir dil/runtime projesidir.
 
-## Geliştirmede Bir Sonraki Ana Alanlar
+## Gelistirmede Bir Sonraki Ana Alanlar
 
 ### 1. Dil seviyesi
 
-- object field assignment
-- list mutation API
 - `break` ve `continue`
-- daha zengin import modeli
 - anonymous function / lambda
 - pattern matching benzeri veri odakli kontrol yapilari
+- daha zengin import modeli
+- standart kutuphane ergonomisini buyutme
 
 ### 2. VM seviyesi
 
@@ -41,24 +43,16 @@ Ama henuz erken asama bir dil/runtime projesidir.
 
 ### 3. Web runtime seviyesi
 
-- daha guclu request parser
-- response headers kontrolu
-- query/body/cookie ergonomisi
-- route params
-- POST/PUT/PATCH akislari
-- middleware zinciri gelistirme
-- basit template rendering
+- auth/session/role middleware'i standart kutuphane seviyesinde olgunlastirma
+- signed cookie ve bearer token akislarini daha iyi paketleme
+- template/rendering katmanini buyutme
+- multipart/form-data ve upload destegi
+- background job / queue primitive'leri
+- e-ticaret odakli backend kaliplari: catalog, cart, order, payment adapterleri
 
-### 4. Paketleme ve dagitim
+### 4. Ekosistem
 
-- repo adinin nihai karari
-- release tagging
-- release note sistemi
-- installer ikonunu daha profesyonel hale getirme
-- Inno Setup veya WiX tabanli installer’a gecis
-
-### 5. Ekosistem
-
+- SQLUna icin daha genel Lunara query/repository API
 - package manager
 - module registry
 - test runner
@@ -66,14 +60,14 @@ Ama henuz erken asama bir dil/runtime projesidir.
 - linter
 - language server
 
-### 6. Host embedding
+### 5. Host embedding
 
-- Python API’yi daha ergonomik yapmak
-- C ABI’yi genisletmek
+- Python API'yi daha ergonomik yapmak
+- C ABI'yi genisletmek
 - host tarafinda structured result donmek
 - error / stack trace bilgisini guclendirmek
 
-### 7. Guvenlik ve production hardening
+### 6. Guvenlik ve production hardening
 
 - daha guclu sandbox stratejisi
 - filesystem izin modeli
@@ -81,30 +75,37 @@ Ama henuz erken asama bir dil/runtime projesidir.
 - config-driven security policy
 - safer plugin/runtime boundaries
 
-### 8. Compute / GPU tarafı
+### 7. Compute / GPU
 
-- capability detection’dan execution modeline gecis
+- capability detection'dan execution modeline gecis
 - CUDA icin gercek runtime katmani
 - compute API tasarimi
 - parallel execution ve worker modeli
+
+### 8. DSP / data compute
+
+- `dsp` modulunu filtreleme, transform ve streaming operatorleri ile buyutme
+- audio/event stream pipeline primitive'leri
+- realtime analytics ve feature extraction helper'lari
+- sayisal sinyal isleme ve feature engineering'i backend verisiyle birlestirme
 
 ## Kisa Teknik Yol Haritasi
 
 En mantikli gelisim sirasi:
 
-1. VM kapsamını genişlet
-2. web runtime’ı oturt
-3. object/list mutasyonunu ekle
+1. web/backend katmanini uretim mantigina yaklastir
+2. SQLUna script API'sini buyut
+3. VM kapsamini genislet
 4. package/module sistemini kur
-5. release/distribution katmanini profesyonellestir
-6. embedding ve plugin API’yi guclendir
+5. DSP/compute tarafini derinlestir
+6. release/distribution ve embedding katmanini profesyonellestir
 
 ## Not
 
-Bu dosya bilerek GitHub acik tanitim metni gibi yazilmadi.
+Bu dosya bilerek acik tanitim metni gibi yazilmadi.
 
 Amac:
 
 - projeyi iceriden takip etmek
-- neyin bittiğini ve neyin sonraya kaldigini net tutmak
+- neyin bittigini ve neyin sonraya kaldigini net tutmak
 - gelistirme odagini dagitmamak

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lunara Full Web Backend</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #f0ead9 0%, #d8ccb2 100%);
+      color: #162119;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    main {
+      width: min(720px, calc(100% - 32px));
+      padding: 28px;
+      border-radius: 24px;
+      background: rgba(255, 249, 236, 0.82);
+      box-shadow: 0 20px 60px rgba(31, 24, 16, 0.12);
+    }
+
+    pre {
+      padding: 16px;
+      border-radius: 16px;
+      background: #1d241d;
+      color: #f7f1e3;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p>web.backend()</p>
+    <h1>Lunara full backend tek portta calisiyor.</h1>
+    <p>Bu sayfa static mount ile geliyor. Asagidaki panel ayni porttaki HTTP ve WebSocket endpointlerinden veri ceker.</p>
+    <pre id="output">loading...</pre>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>

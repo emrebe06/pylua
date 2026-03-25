@@ -1,0 +1,53 @@
+import web
+import time
+
+let app = web.router()
+
+func request_logger(ctx)
+    print("api " + ctx.request.method + " " + ctx.request.path)
+    return nil
+end
+
+func health(ctx)
+    return web.with_headers(
+        web.json({
+            status: "ok",
+            service: "lunara-api",
+            now: time.utc(),
+            origin: ctx.request.headers["origin"]
+        }, 200),
+        {
+            "X-Lunara-Bridge": "api"
+        }
+    )
+end
+
+func profile(ctx)
+    return web.json({
+        user_id: ctx.request.params.id,
+        display_name: "User " + ctx.request.params.id,
+        method: ctx.request.method,
+        query: ctx.request.query,
+        cookies: ctx.request.cookies
+    }, 200)
+end
+
+func echo(ctx)
+    return web.with_headers(
+        web.json({
+            received: ctx.request.json,
+            body: ctx.request.body,
+            path: ctx.request.path,
+            at: time.utc()
+        }, 200),
+        {
+            "X-Lunara-Bridge": "echo"
+        }
+    )
+end
+
+app.use(request_logger)
+app.get("/health", health)
+app.get("/api/users/:id", profile)
+app.post("/api/echo", echo)
+app.listen(8093)

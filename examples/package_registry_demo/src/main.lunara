@@ -1,0 +1,12 @@
+import json
+import checkout.catalog as catalog
+import mailers.templates as templates
+
+let item = catalog.first_item()
+let email = templates.receipt(item.name)
+
+print(json.encode({
+    item: item.name,
+    email_subject: email.subject,
+    audience: email.audience
+}))

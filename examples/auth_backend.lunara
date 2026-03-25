@@ -1,0 +1,222 @@
+import web
+import sqluna
+import json
+
+let store = sqluna.auth_store("build/auth_demo/auth.db")
+let db = sqluna.sqlite("build/auth_demo/auth.db")
+let app = web.backend()
+const bearer_secret = "lunara-dev-secret"
+
+app.cors("http://127.0.0.1:8098")
+app.static("/", "examples/auth_backend_site")
+app.use(store.session_middleware)
+app.use(store.bearer_middleware(bearer_secret))
+
+func payload_error()
+    return web.json({error: "username and password are required"}, 400)
+end
+
+func read_payload(ctx)
+    if ctx.request.body == "" then
+        return nil
+    end
+    return json.decode(ctx.request.body)
+end
+
+func register(ctx)
+    let payload = read_payload(ctx)
+    if payload == nil then
+        return payload_error()
+    end
+
+    let username = payload["username"]
+    let password = payload["password"]
+    if username == nil or password == nil then
+        return payload_error()
+    end
+
+    let user = nil
+    if payload["role"] != nil then
+        user = store.register_with_role(username, password, payload["role"])
+    else
+        user = store.register_user(username, password)
+    end
+    let session = store.create_session(user.id)
+    let response = web.json({
+        ok: true,
+        user: user
+    }, 201)
+    return web.cookie(response, "session", session.token)
+end
+
+func login(ctx)
+    let payload = read_payload(ctx)
+    if payload == nil then
+        return payload_error()
+    end
+
+    let result = store.login(payload["username"], payload["password"])
+    if result == nil then
+        return web.json({error: "invalid_credentials"}, 401)
+    end
+
+    let response = web.json({
+        ok: true,
+        user: result.user
+    }, 200)
+    return web.cookie(response, "session", result.session.token)
+end
+
+func me(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    return web.json({
+        ok: true,
+        user: ctx.request["user"],
+        session: ctx.request["session"]
+    }, 200)
+end
+
+func protected_panel(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    return web.json({
+        ok: true,
+        secret: "lunara-protected-area",
+        user: ctx.request["user"]
+    }, 200)
+end
+
+func admin_panel(ctx)
+    let guard = store.require_permission(ctx, "reports.view")
+    if guard != nil then
+        return guard
+    end
+
+    return web.json({
+        ok: true,
+        area: "admin",
+        user: ctx.request["user"]
+    }, 200)
+end
+
+func users_list(ctx)
+    let users = db.select("users", ["id", "username", "role", "email_verified"], {}, 20)
+    return web.json({
+        ok: true,
+        users: users
+    }, 200)
+end
+
+func issue_token(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    let user = ctx.request["user"]
+    let token = store.issue_signed_token(user.id, bearer_secret)
+    return web.json({
+        ok: true,
+        token: token
+    }, 200)
+end
+
+func verify_email_start(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    let user = ctx.request["user"]
+    return web.json({
+        ok: true,
+        ticket: store.begin_email_verification(user.id)
+    }, 200)
+end
+
+func verify_email_finish(ctx)
+    let user = store.verify_email(ctx.request.params.token)
+    if user == nil then
+        return web.json({error: "invalid_token"}, 404)
+    end
+    return web.json({
+        ok: true,
+        user: user
+    }, 200)
+end
+
+func password_reset_start(ctx)
+    let payload = read_payload(ctx)
+    if payload == nil or payload["username"] == nil then
+        return web.json({error: "username required"}, 400)
+    end
+
+    let ticket = store.begin_password_reset(payload["username"])
+    if ticket == nil then
+        return web.json({error: "user_not_found"}, 404)
+    end
+    return web.json({
+        ok: true,
+        ticket: ticket
+    }, 200)
+end
+
+func password_reset_finish(ctx)
+    let payload = read_payload(ctx)
+    if payload == nil or payload["password"] == nil then
+        return web.json({error: "password required"}, 400)
+    end
+
+    let user = store.reset_password(ctx.request.params.token, payload["password"])
+    if user == nil then
+        return web.json({error: "invalid_token"}, 404)
+    end
+    return web.json({
+        ok: true,
+        user: user
+    }, 200)
+end
+
+func bearer_area(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    return web.json({
+        ok: true,
+        mode: "bearer",
+        user: ctx.request["user"]
+    }, 200)
+end
+
+func logout(ctx)
+    let session = ctx.request["session"]
+    if session != nil then
+        store.delete_session(session.token)
+    end
+
+    return web.clear_cookie(web.json({ok: true}, 200), "session")
+end
+
+app.post("/register", register)
+app.post("/login", login)
+app.post("/logout", logout)
+app.get("/me", me)
+app.get("/protected", protected_panel)
+app.get("/admin", admin_panel)
+app.get("/users", users_list)
+app.get("/issue-token", issue_token)
+app.post("/verify-email/start", verify_email_start)
+app.get("/verify-email/:token", verify_email_finish)
+app.post("/password-reset/start", password_reset_start)
+app.post("/password-reset/:token", password_reset_finish)
+app.get("/bearer-area", bearer_area)
+app.listen(8098)

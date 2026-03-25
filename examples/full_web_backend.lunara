@@ -1,0 +1,60 @@
+import web
+import time
+
+let app = web.backend()
+app.cors("http://127.0.0.1:8096")
+app.static("/", "examples/full_web_backend_site")
+
+func health(ctx)
+    return web.json({
+        status: "ok",
+        service: "full-web-backend",
+        now: time.utc()
+    }, 200)
+end
+
+func login(ctx)
+    let response = web.json({
+        ok: true,
+        received: ctx.request.json,
+        cookies: ctx.request.cookies
+    }, 200)
+    return web.cookie(response, "session", "lunara-backend")
+end
+
+func profile(ctx)
+    return web.json({
+        user_id: ctx.request.params.id,
+        route: ctx.request.path,
+        params: ctx.request.params
+    }, 200)
+end
+
+func socket_open(client)
+    client.send_text("{\"kind\":\"open\",\"path\":\"" + client.path + "\"}")
+    return nil
+end
+
+func socket_message(client, message)
+    return {
+        kind: "backend-echo",
+        path: client.path,
+        message: message,
+        at: time.utc()
+    }
+end
+
+func socket_close(client)
+    print("backend ws closed " + client.path)
+    return nil
+end
+
+app.get("/health", health)
+app.post("/login", login)
+app.get("/api/users/:id", profile)
+app.ws("/ws", {
+    open: socket_open,
+    message: socket_message,
+    close: socket_close
+})
+app.listen(8096)

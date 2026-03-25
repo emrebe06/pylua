@@ -1,0 +1,7 @@
+func total_price(price: number, quantity: number): number
+    return price * quantity
+end
+
+let title: string = 42
+let quantity: number = "many"
+let grand_total: number = total_price("9", 3)

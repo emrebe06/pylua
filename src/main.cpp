@@ -15,6 +15,7 @@ void print_help() {
         << "  lunara run <script.lunara>\n"
         << "  lunara vm <script.lunara>\n"
         << "  lunara check <script.lunara>\n"
+        << "  lunara analyze <script.lunara>\n"
         << "  lunara version\n"
         << "  lunara help\n";
 }
@@ -59,6 +60,11 @@ int main(int argc, char** argv) {
         if (command == "check") {
             lunara::engine::check_file(script_path);
             std::cout << "OK: " << script_path.string() << '\n';
+            return 0;
+        }
+
+        if (command == "analyze") {
+            lunara::engine::analyze_file(script_path, std::cout);
             return 0;
         }
 

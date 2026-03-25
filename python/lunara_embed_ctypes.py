@@ -2,13 +2,34 @@
 
 import ctypes
 from pathlib import Path
+import sys
 
 
 class LunaraEmbed:
     def __init__(self, dll_path: str | Path | None = None) -> None:
         root = Path(__file__).resolve().parents[1]
-        default_path = root / "build" / "Debug" / "lunara_embed.dll"
-        self.dll_path = Path(dll_path) if dll_path else default_path
+        if dll_path:
+            self.dll_path = Path(dll_path)
+        else:
+            candidates = []
+            if sys.platform.startswith("win"):
+                candidates.extend([
+                    root / "build" / "Debug" / "lunara_embed.dll",
+                    root / "build" / "Release" / "lunara_embed.dll",
+                ])
+            elif sys.platform == "darwin":
+                candidates.extend([
+                    root / "build" / "liblunara_embed.dylib",
+                    root / "build" / "lunara_embed.dylib",
+                ])
+            else:
+                candidates.extend([
+                    root / "build" / "liblunara_embed.so",
+                    root / "build" / "lunara_embed.so",
+                ])
+
+            existing = next((candidate for candidate in candidates if candidate.exists()), candidates[0])
+            self.dll_path = existing
         self.lib = ctypes.CDLL(str(self.dll_path))
 
         self.lib.lunara_run_file.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_int)]

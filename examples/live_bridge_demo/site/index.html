@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lunara Live Bridge Demo</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">Lunara Browser Bridge</p>
+      <h1>Cross-origin fetch ve WebSocket tek panelde.</h1>
+      <p class="hero-copy">
+        Bu ekran frontend'i `http://127.0.0.1:8081` uzerinden servis eder, API'yi `8093` portundan,
+        WebSocket'i ise `8094` portundan tuketir. Amac CORS ve gercek zamanli kopruyu birlikte gostermek.
+      </p>
+      <div class="hero-actions">
+        <button id="health-btn">Health Check</button>
+        <button id="user-btn">Kullanici Yukle</button>
+        <button id="echo-btn">JSON Echo Gonder</button>
+        <button id="ws-btn">WebSocket Mesaji Gonder</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <div class="card-head">
+          <h2>Bridge Durumu</h2>
+          <span id="status-pill" class="pill pending">hazirlaniyor</span>
+        </div>
+        <div class="kv-list">
+          <div><span>Frontend</span><strong>http://127.0.0.1:8081</strong></div>
+          <div><span>API</span><strong>http://127.0.0.1:8093</strong></div>
+          <div><span>WebSocket</span><strong>ws://127.0.0.1:8094</strong></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>HTTP Sonucu</h2>
+          <span class="pill">fetch</span>
+        </div>
+        <pre id="http-output" class="output">Bekleniyor...</pre>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>WebSocket Akisi</h2>
+          <span class="pill">live</span>
+        </div>
+        <pre id="ws-output" class="output">Baglanti kuruluyor...</pre>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Olay Gunlugu</h2>
+          <span class="pill">bridge</span>
+        </div>
+        <ul id="event-log" class="event-log"></ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="./lunara_bridge.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

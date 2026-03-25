@@ -1,4 +1,4 @@
-# GitHub Repo Profile For Lunara
+# GitHub Repo Profile For Lunura Dili
 
 This file is a ready-to-paste profile pack for the GitHub repository page.
 
@@ -6,19 +6,23 @@ This file is a ready-to-paste profile pack for the GitHub repository page.
 
 Recommended final repository name:
 
-`lunara`
+`lunura-dili`
+
+Alternative if you want to keep it shorter:
+
+`lunura`
 
 ## Short Description
 
 Use one of these in the GitHub repository description field:
 
-1. `Native scripting language for data pipelines, local automation, lightweight web backends, and embedding.`
-2. `Data-first scripting language with CLI, installer, early VM support, web runtime, and Python embedding.`
-3. `A native embeddable scripting runtime for JSON workflows, automation, web tooling, and app scripting.`
+1. `Native scripting language for web backends, e-commerce apps, automation, SQL workflows, and embedding.`
+2. `Backend-first scripting language with parser, interpreter, VM path, SQLUna, web runtime, and auth tooling.`
+3. `Modern native scripting language for APIs, data pipelines, e-commerce services, and embeddable runtime workflows.`
 
 Recommended:
 
-`Data-first scripting language with CLI, installer, early VM support, web runtime, and Python embedding.`
+`Backend-first scripting language with parser, interpreter, VM path, SQLUna, web runtime, and auth tooling.`
 
 ## Website
 
@@ -26,16 +30,22 @@ If you later publish docs or a landing page, put it here.
 
 For now you can leave website empty or use:
 
-`https://github.com/emrebe06/lunara`
+`https://github.com/emrebe06/Lunura`
 
-after the repo rename is complete.
+until the repo rename is complete.
 
 ## Topics
 
 Recommended GitHub topics:
 
+- lunura
+- lunura-dili
+- lunara
 - scripting-language
 - programming-language
+- backend-language
+- web-backend
+- ecommerce
 - runtime
 - interpreter
 - vm
@@ -43,9 +53,19 @@ Recommended GitHub topics:
 - embeddable
 - automation
 - json
+- sql
+- sqlite
+- orm
+- auth
+- websocket
 - web-runtime
 - cli
+- package-manager
+- static-analysis
+- pattern-matching
+- dsp
 - windows-installer
+- ubuntu
 - cpp
 - developer-tools
 
@@ -53,46 +73,63 @@ Recommended GitHub topics:
 
 Recommended one-line pitch:
 
-`Lunara is a native scripting language and runtime for data pipelines, local automation, lightweight web backends, and embeddable application scripting.`
+`Lunura Dili is a native scripting language and runtime for modern web backends, e-commerce services, automation, SQL workflows, and embeddable application scripting.`
 
 ## Suggested Social/Announcement Text
 
 Short version:
 
-`Lunara is a new native scripting language focused on data workflows, automation, JSON tooling, lightweight web runtime experiments, and Python embedding.`
+`Lunura Dili is a native scripting language built for web backends, e-commerce apps, automation, SQL workflows, and embeddable runtime development.`
 
 Longer version:
 
-`Lunara is an experimental native scripting language and runtime built for practical developer workflows: data exports, JSON pipelines, automation, lightweight web backends, Windows installer delivery, and Python-hosted embedding.`
+`Lunura Dili is an experimental but fast-growing native scripting language and runtime built for practical backend work: APIs, auth/session flows, SQLite and SQLUna integration, automation, DSP helpers, e-commerce backend prototypes, and host-app embedding.`
 
 ## Suggested Release Title
 
-`Lunara v0.1.0 - First Public Runtime Preview`
+`Lunura Dili v0.1.0 - Backend Runtime Preview`
 
 ## Suggested Release Notes
 
-`Lunara v0.1.0 is the first public preview of the language runtime. This release includes the native CLI, parser/interpreter pipeline, early VM compatibility path, Python embedding bridge, Windows installer generation, example scripts, and the first wave of data/web-oriented standard modules.`
+`Lunura Dili v0.1.0 is the first backend-oriented public preview of the language runtime. This release includes the native CLI, parser/interpreter pipeline, early VM compatibility path, FastAPI-style web runtime ideas, SQLUna integration, auth/session examples, e-commerce backend demos, pattern matching, static analysis, package-lock-aware module resolution, and Python embedding.`
 
 ## Suggested About Section Summary
 
-What Lunara is:
+What Lunura Dili is:
 
 - native scripting runtime
-- data-first design
-- JSON and automation friendly
+- backend-first design
+- web/API oriented
+- SQL and auth friendly
 - embeddable from Python
-- lightweight web/runtime experiments
+- e-commerce/backend experimentation ready
 
-What Lunara is not yet:
+What Lunura Dili is not yet:
 
 - a fully mature production framework
 - a fully complete bytecode VM
-- a finished package ecosystem
+- a finished remote package ecosystem
+- a fully optimized production compiler
 
 ## Recommended Next GitHub Steps
 
-1. Rename the repository from `pylua` to `lunara`.
+1. Rename the repository from `Lunura` to `lunura-dili` or `lunura`.
 2. Set the short description using the recommended text above.
-3. Add the suggested topics.
-4. Pin the repository on your GitHub profile.
-5. Create a `v0.1.0` release and attach the Windows installer.
+3. Add the suggested topics in the GitHub About panel.
+4. Update the social preview image to mention `Lunura Dili`.
+5. Pin the repository on your GitHub profile.
+6. Create a `v0.1.0` release and attach the Windows installer.
+
+## Suggested About Panel Copy
+
+Name:
+
+`Lunura Dili`
+
+Description:
+
+`Backend-first native scripting language with web runtime, SQLUna, auth tooling, pattern matching, static analysis, and embeddable runtime support.`
+
+Topics:
+
+`lunura, lunura-dili, lunara, scripting-language, programming-language, web-backend, ecommerce, sql, orm, auth, websocket, cpp, interpreter, vm, automation`

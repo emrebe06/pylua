@@ -2,8 +2,10 @@
 
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <unordered_map>
 #include <vector>
 
@@ -32,6 +34,7 @@ class Interpreter {
     std::unordered_map<std::string, runtime::Value> module_cache_;
     std::vector<std::shared_ptr<ast::Program>> owned_programs_;
     std::vector<std::filesystem::path> script_stack_;
+    std::vector<std::vector<std::pair<const ast::Expr*, std::shared_ptr<runtime::Environment>>>> deferred_blocks_;
     std::ostream* output_;
 };
 

@@ -1,0 +1,6 @@
+func receipt(product_name: string): object<string>
+    return {
+        subject: "Siparis onayi: " + product_name,
+        audience: "customer"
+    }
+end

@@ -1,0 +1,31 @@
+import json
+
+let trail: string = ""
+
+func classify(kind: string): string
+    defer trail = trail + "func;"
+    try
+        defer trail = trail + "try;"
+        match kind do
+            when "order" then
+                return "order"
+            when "refund" then
+                throw "refund_blocked"
+            when other then
+                return "other:" + other
+        end
+    catch err
+        return "caught:" + err
+    finally
+        trail = trail + "finally;"
+    end
+end
+
+let refund_result = classify("refund")
+let custom_result = classify("shipment")
+
+print(json.encode({
+    refund: refund_result,
+    custom: custom_result,
+    trail: trail
+}))

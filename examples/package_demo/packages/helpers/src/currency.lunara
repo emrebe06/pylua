@@ -1,0 +1,10 @@
+func code(): string
+    return "TRY"
+end
+
+func label(amount: number): object
+    return {
+        currency: code(),
+        amount: amount
+    }
+end

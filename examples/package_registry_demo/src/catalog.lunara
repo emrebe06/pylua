@@ -1,0 +1,6 @@
+func first_item()
+    return {
+        name: "Lunara Basket",
+        price: 420
+    }
+end

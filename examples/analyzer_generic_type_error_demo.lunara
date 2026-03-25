@@ -1,0 +1,5 @@
+let tags: list<string> = ["organic", 7]
+let labels: object<string> = {
+    channel: "web",
+    attempts: 2
+}

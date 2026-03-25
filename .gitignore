@@ -25,6 +25,9 @@ compile_commands.json
 *.exe
 *.cab
 *.zip
+sqluna_demo.db
+examples/logs/
+examples/live_bridge_demo/logs/
 
 # Python
 __pycache__/

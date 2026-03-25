@@ -1,0 +1,15 @@
+import json
+import shopkit.catalog as catalog
+import helpers.currency as currency
+
+let featured = catalog.featured_products()
+let primary = featured[0]
+let pricing = currency.label(primary.price)
+
+print(json.encode({
+    package: catalog.package_name,
+    count: len(featured),
+    first: primary.name,
+    currency: pricing.currency,
+    amount: pricing.amount
+}))

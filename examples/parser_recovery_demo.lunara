@@ -1,0 +1,10 @@
+let title: string =
+
+func greet(name: string
+    print(name)
+end
+
+match 7 do
+    when then
+        print("bad")
+end

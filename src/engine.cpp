@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "lunara/analyzer.hpp"
 #include "lunara/interpreter.hpp"
 #include "lunara/lexer.hpp"
 #include "lunara/parser.hpp"
@@ -29,7 +30,7 @@ std::string read_file(const std::filesystem::path& path) {
 ast::Program parse_program(const std::string& source) {
     Lexer lexer(source);
     auto tokens = lexer.scan_tokens();
-    Parser parser(std::move(tokens));
+    Parser parser(std::move(tokens), source);
     return parser.parse();
 }
 
@@ -51,6 +52,18 @@ std::string backend_name(Backend backend) {
 
 void check_file(const std::filesystem::path& script_path) {
     static_cast<void>(parse_program(read_file(script_path)));
+}
+
+void analyze_file(const std::filesystem::path& script_path, std::ostream& output) {
+    const auto diagnostics = analysis::analyze_file(script_path);
+    if (diagnostics.empty()) {
+        output << "OK: no analyzer findings for " << script_path.string() << '\n';
+        return;
+    }
+    output << "Analyzer findings for " << script_path.string() << ":\n";
+    for (const auto& diagnostic : diagnostics) {
+        output << " - " << diagnostic.message << '\n';
+    }
 }
 
 void run_source(const std::string& source, const std::filesystem::path& virtual_path, Backend backend, std::ostream& output) {

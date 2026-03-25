@@ -1,0 +1,217 @@
+import web
+import sqluna
+import json
+import time
+
+let store = sqluna.auth_store("build/ecommerce_demo/store.db")
+let db = sqluna.sqlite("build/ecommerce_demo/store.db")
+let app = web.backend()
+
+app.cors("http://127.0.0.1:8100")
+app.use(store.session_middleware)
+
+db.create_table("products", [
+    {name: "id", type: "integer", primary_key: true, auto_increment: true, not_null: true},
+    {name: "sku", type: "text", not_null: true},
+    {name: "title", type: "text", not_null: true},
+    {name: "price", type: "real", not_null: true},
+    {name: "stock", type: "integer", not_null: true},
+    {name: "created_at", type: "text", not_null: true}
+])
+
+db.create_table("orders", [
+    {name: "id", type: "integer", primary_key: true, auto_increment: true, not_null: true},
+    {name: "user_id", type: "integer", not_null: true},
+    {name: "product_id", type: "integer", not_null: true},
+    {name: "quantity", type: "integer", not_null: true},
+    {name: "total", type: "real", not_null: true},
+    {name: "status", type: "text", not_null: true},
+    {name: "created_at", type: "text", not_null: true}
+])
+
+func seed_data()
+    if db.count("products", {}) == 0 then
+        db.insert("products", {
+            sku: "LUN-COFFEE-001",
+            title: "Lunara Blend",
+            price: 349.9,
+            stock: 12,
+            created_at: time.utc()
+        })
+        db.insert("products", {
+            sku: "LUN-MUG-002",
+            title: "Lunara Mug",
+            price: 179.5,
+            stock: 30,
+            created_at: time.utc()
+        })
+    end
+
+    if db.first("users", ["id", "username"], {username: "manager"}) == nil then
+        store.register_with_role("manager", "manager-pass", "manager")
+    end
+end
+
+seed_data()
+
+func read_payload(ctx)
+    if ctx.request.body == "" then
+        return nil
+    end
+    return json.decode(ctx.request.body)
+end
+
+func payload_error(message)
+    return web.json({error: message}, 400)
+end
+
+func register(ctx)
+    let payload = read_payload(ctx)
+    if payload == nil or payload["username"] == nil or payload["password"] == nil then
+        return payload_error("username and password are required")
+    end
+
+    let user = store.register_user(payload["username"], payload["password"])
+    let session = store.create_session(user.id)
+    let response = web.json({
+        ok: true,
+        user: user
+    }, 201)
+    return web.cookie(response, "session", session.token)
+end
+
+func login(ctx)
+    let payload = read_payload(ctx)
+    if payload == nil or payload["username"] == nil or payload["password"] == nil then
+        return payload_error("username and password are required")
+    end
+
+    let result = store.login(payload["username"], payload["password"])
+    if result == nil then
+        return web.json({error: "invalid_credentials"}, 401)
+    end
+
+    let response = web.json({
+        ok: true,
+        user: result.user
+    }, 200)
+    return web.cookie(response, "session", result.session.token)
+end
+
+func catalog(ctx)
+    return web.json({
+        ok: true,
+        items: db.select("products", ["id", "sku", "title", "price", "stock"], {}, 50)
+    }, 200)
+end
+
+func create_order(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    let payload = read_payload(ctx)
+    if payload == nil or payload["product_id"] == nil or payload["quantity"] == nil then
+        return payload_error("product_id and quantity are required")
+    end
+
+    let product = db.first("products", ["id", "title", "price", "stock"], {id: payload["product_id"]})
+    if product == nil then
+        return web.json({error: "product_not_found"}, 404)
+    end
+
+    if product.stock < payload["quantity"] then
+        return web.json({error: "insufficient_stock"}, 409)
+    end
+
+    let user = ctx.request["user"]
+    let total = product.price * payload["quantity"]
+    let order_id = db.insert("orders", {
+        user_id: user.id,
+        product_id: product.id,
+        quantity: payload["quantity"],
+        total: total,
+        status: "pending",
+        created_at: time.utc()
+    })
+    db.update_where("products", {
+        stock: product.stock - payload["quantity"]
+    }, {
+        id: product.id
+    })
+
+    return web.json({
+        ok: true,
+        order: db.first("orders", ["id", "user_id", "product_id", "quantity", "total", "status", "created_at"], {id: order_id})
+    }, 201)
+end
+
+func my_orders(ctx)
+    let guard = store.require_user(ctx)
+    if guard != nil then
+        return guard
+    end
+
+    let user = ctx.request["user"]
+    return web.json({
+        ok: true,
+        orders: db.select("orders", ["id", "product_id", "quantity", "total", "status", "created_at"], {user_id: user.id}, 50)
+    }, 200)
+end
+
+func admin_orders(ctx)
+    let guard = store.require_permission(ctx, "orders.read")
+    if guard != nil then
+        return guard
+    end
+
+    return web.json({
+        ok: true,
+        orders: db.select("orders", ["id", "user_id", "product_id", "quantity", "total", "status", "created_at"], {}, 100)
+    }, 200)
+end
+
+func update_order_status(ctx)
+    let guard = store.require_permission(ctx, "orders.write")
+    if guard != nil then
+        return guard
+    end
+
+    let payload = read_payload(ctx)
+    if payload == nil or payload["status"] == nil then
+        return payload_error("status is required")
+    end
+
+    db.update_where("orders", {status: payload["status"]}, {id: ctx.request.params.id})
+    return web.json({
+        ok: true,
+        order: db.first("orders", ["id", "user_id", "product_id", "quantity", "total", "status", "created_at"], {id: ctx.request.params.id})
+    }, 200)
+end
+
+func metrics(ctx)
+    let guard = store.require_permission(ctx, "reports.view")
+    if guard != nil then
+        return guard
+    end
+
+    return web.json({
+        ok: true,
+        totals: {
+            products: db.count("products", {}),
+            orders: db.count("orders", {}),
+            users: db.count("users", {})
+        }
+    }, 200)
+end
+
+app.post("/register", register)
+app.post("/login", login)
+app.get("/catalog", catalog)
+app.post("/orders", create_order)
+app.get("/orders/me", my_orders)
+app.get("/admin/orders", admin_orders)
+app.post("/admin/orders/:id/status", update_order_status)
+app.get("/admin/metrics", metrics)
+app.listen(8100)

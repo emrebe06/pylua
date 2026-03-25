@@ -2,6 +2,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -83,15 +84,17 @@ class Callable {
 struct Binding {
     Value value;
     bool is_const = false;
+    std::optional<std::string> type_hint;
 };
 
 class Environment : public std::enable_shared_from_this<Environment> {
   public:
     explicit Environment(std::shared_ptr<Environment> enclosing = nullptr);
 
-    void define(const std::string& name, const Value& value, bool is_const);
+    void define(const std::string& name, const Value& value, bool is_const, std::optional<std::string> type_hint = std::nullopt);
     void assign(const std::string& name, const Value& value);
     Value get(const std::string& name) const;
+    std::optional<std::string> type_hint_for(const std::string& name) const;
     std::map<std::string, Value> exported_values() const;
 
   private:

@@ -12,9 +12,12 @@ const std::unordered_map<std::string, TokenType> kKeywords = {
     {"let", TokenType::Let},
     {"const", TokenType::Const},
     {"import", TokenType::Import},
+    {"as", TokenType::As},
     {"func", TokenType::Func},
     {"for", TokenType::For},
     {"in", TokenType::In},
+    {"match", TokenType::Match},
+    {"when", TokenType::When},
     {"if", TokenType::If},
     {"then", TokenType::Then},
     {"elseif", TokenType::ElseIf},
@@ -23,6 +26,13 @@ const std::unordered_map<std::string, TokenType> kKeywords = {
     {"while", TokenType::While},
     {"do", TokenType::Do},
     {"return", TokenType::Return},
+    {"defer", TokenType::Defer},
+    {"try", TokenType::Try},
+    {"catch", TokenType::Catch},
+    {"finally", TokenType::Finally},
+    {"throw", TokenType::Throw},
+    {"break", TokenType::Break},
+    {"continue", TokenType::Continue},
     {"true", TokenType::True},
     {"false", TokenType::False},
     {"nil", TokenType::Nil},
@@ -55,6 +65,8 @@ std::string token_type_name(TokenType type) {
             return "Dot";
         case TokenType::Minus:
             return "Minus";
+        case TokenType::Percent:
+            return "Percent";
         case TokenType::Plus:
             return "Plus";
         case TokenType::Slash:
@@ -87,12 +99,18 @@ std::string token_type_name(TokenType type) {
             return "Const";
         case TokenType::Import:
             return "Import";
+        case TokenType::As:
+            return "As";
         case TokenType::Func:
             return "Func";
         case TokenType::For:
             return "For";
         case TokenType::In:
             return "In";
+        case TokenType::Match:
+            return "Match";
+        case TokenType::When:
+            return "When";
         case TokenType::If:
             return "If";
         case TokenType::Then:
@@ -109,6 +127,20 @@ std::string token_type_name(TokenType type) {
             return "Do";
         case TokenType::Return:
             return "Return";
+        case TokenType::Defer:
+            return "Defer";
+        case TokenType::Try:
+            return "Try";
+        case TokenType::Catch:
+            return "Catch";
+        case TokenType::Finally:
+            return "Finally";
+        case TokenType::Throw:
+            return "Throw";
+        case TokenType::Break:
+            return "Break";
+        case TokenType::Continue:
+            return "Continue";
         case TokenType::True:
             return "True";
         case TokenType::False:
@@ -237,6 +269,9 @@ void Lexer::scan_token() {
             break;
         case '-':
             add_token(TokenType::Minus);
+            break;
+        case '%':
+            add_token(TokenType::Percent);
             break;
         case '+':
             add_token(TokenType::Plus);

@@ -1,0 +1,28 @@
+import json
+
+let tags: list<string> = ["organic", "fresh", "local"]
+let labels: object<string> = {
+    channel: "web",
+    state: "ready"
+}
+
+let event = {
+    kind: "checkout",
+    payload: ["TRY", 3],
+    meta: {
+        channel: "web"
+    }
+}
+
+match event do
+    when {kind: "checkout", payload: [currency, amount], meta: {channel}} then
+        print(json.encode({
+            currency: currency,
+            amount: amount,
+            channel: channel,
+            state: labels.state,
+            tag_count: len(tags)
+        }))
+    else
+        print(json.encode({ok: false}))
+end
